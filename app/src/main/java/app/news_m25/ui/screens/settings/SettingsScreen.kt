@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.news_m25.BuildConfig
+import app.news_m25.util.Logger
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

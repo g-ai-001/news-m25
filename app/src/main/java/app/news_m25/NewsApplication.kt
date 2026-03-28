@@ -8,7 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 class NewsApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        Logger.dnit(this)
+        Logger.init(this)
         Logger.d("NewsApplication", "NewsApplication initialized")
     }
 }
