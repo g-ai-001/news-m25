@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
 import app.news_m25.util.SettingsManager
-import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -134,7 +133,6 @@ class SettingsViewModel @Inject constructor(
                     newsRepository.deleteAllNonFavoriteNews()
 
                     // Clear all preferences via DataStore
-                    ThemeManager.clearAll(context)
                     SettingsManager.clearAll(context)
 
                     Logger.d("SettingsViewModel", "All data cleared")

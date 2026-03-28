@@ -39,6 +39,24 @@
    - [x] 支持按热度排序 (最热)
    - [x] 排序设置持久化
 
+### 0.3.1 版本 - 重构优化
+**目标**: 优化代码结构，减少重复代码，提高代码可维护性
+
+#### 功能清单
+1. **统一DataStore实例**
+   - [ ] 移除ThemeManager中的dataStore定义，统一使用settingsDataStore
+   - [ ] 更新ThemeManager使用SettingsManager中的DataStore
+
+2. **合并Manager职责**
+   - [ ] 将ThemeManager的clearAll功能合并到SettingsManager
+   - [ ] 移除ThemeManager中的clearAll方法
+   - [ ] 简化clearAll调用逻辑
+
+3. **提取NewsCard通用组件**
+   - [ ] 提取NewsCard和NewsCardLarge的公共布局代码
+   - [ ] 创建通用的新闻信息展示组件
+   - [ ] 减少代码重复
+
 ## 中期规划 (0.4.x - 0.5.x)
 - 视频播放功能完善
 - 个性化推荐算法优化
@@ -47,6 +65,7 @@
 - 多媒体新闻支持
 
 ## 版本历史
+- 0.3.1 - 重构优化：统一DataStore实例、合并SettingsManager和ThemeManager的clearAll方法、提取NewsCard通用组件 (进行中)
 - 0.3.0 - 用户体验提升：文字大小调整、阅读统计、新闻排序 (已完成)
 - 0.2.1 - 重构优化：ThemeViewModel添加@HiltViewModel、ThemeManager新增clearAll()、统一使用DataStore、新增StateComponents组件 (已完成)
 - 0.2.0 - 离线缓存管理：添加缓存过期机制、自动清理过期缓存、手动清理缓存功能 (已完成)

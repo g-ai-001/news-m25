@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -34,6 +33,55 @@ import app.news_m25.domain.model.News
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+@Composable
+private fun NewsMetaInfo(
+    source: String,
+    timestamp: Long,
+    modifier: Modifier = Modifier,
+    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.labelSmall
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = source,
+            style = style,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = " · ",
+            style = style,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = formatTime(timestamp),
+            style = style,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun FavoriteButton(
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    iconSize: Int = 20
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.size(if (iconSize == 20) 32.dp else 40.dp)
+    ) {
+        Icon(
+            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = "收藏",
+            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(iconSize.dp)
+        )
+    }
+}
 
 @Composable
 fun NewsCard(
@@ -96,37 +144,15 @@ fun NewsCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = news.source,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = " · ",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = formatTime(news.publishedAt),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    NewsMetaInfo(
+                        source = news.source,
+                        timestamp = news.publishedAt
+                    )
 
-                    Row {
-                        IconButton(
-                            onClick = onFavoriteClick,
-                            modifier = Modifier.size(32.dp)
-                        ) {
-                            Icon(
-                                imageVector = if (news.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                contentDescription = "收藏",
-                                tint = if (news.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
+                    FavoriteButton(
+                        isFavorite = news.isFavorite,
+                        onClick = onFavoriteClick
+                    )
                 }
             }
         }
@@ -189,38 +215,24 @@ fun NewsCardLarge(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = news.source,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = " · ",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = formatTime(news.publishedAt),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    NewsMetaInfo(
+                        source = news.source,
+                        timestamp = news.publishedAt,
+                        style = MaterialTheme.typography.labelMedium
+                    )
 
-                    IconButton(onClick = onFavoriteClick) {
-                        Icon(
-                            imageVector = if (news.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "收藏",
-                            tint = if (news.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    FavoriteButton(
+                        isFavorite = news.isFavorite,
+                        onClick = onFavoriteClick,
+                        iconSize = 24
+                    )
                 }
             }
         }
     }
 }
 
-private fun formatTime(timestamp: Long): String {
+fun formatTime(timestamp: Long): String {
     val now = System.currentTimeMillis()
     val diff = now - timestamp
 
