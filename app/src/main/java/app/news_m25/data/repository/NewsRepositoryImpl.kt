@@ -66,4 +66,20 @@ class NewsRepositoryImpl @Inject constructor(
     override suspend fun deleteNews(id: Long) {
         newsDao.deleteNews(id)
     }
+
+    override suspend fun getNewsCount(): Int {
+        return newsDao.getNewsCount()
+    }
+
+    override suspend fun getExpiredNewsCount(): Int {
+        return newsDao.getExpiredNewsCount(System.currentTimeMillis())
+    }
+
+    override suspend fun deleteExpiredNews(): Int {
+        return newsDao.deleteExpiredNews(System.currentTimeMillis())
+    }
+
+    override suspend fun deleteAllNonFavoriteNews(): Int {
+        return newsDao.deleteAllNonFavoriteNews()
+    }
 }

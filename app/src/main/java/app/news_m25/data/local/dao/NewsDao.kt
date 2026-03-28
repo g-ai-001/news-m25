@@ -25,6 +25,15 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE isFavorite = 1 ORDER BY publishedAt DESC")
     fun getFavoriteNews(): Flow<List<NewsEntity>>
 
+    @Query("SELECT COUNT(*) FROM news")
+    suspend fun getNewsCount(): Int
+
+    @Query("SELECT COUNT(*) FROM news WHERE :timestamp > expiresAt")
+    suspend fun getExpiredNewsCount(timestamp: Long): Int
+
+    @Query("DELETE FROM news WHERE :timestamp > expiresAt AND isFavorite = 0")
+    suspend fun deleteExpiredNews(timestamp: Long): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNews(news: NewsEntity): Long
 
@@ -45,4 +54,7 @@ interface NewsDao {
 
     @Query("DELETE FROM news WHERE id = :id")
     suspend fun deleteNews(id: Long)
+
+    @Query("DELETE FROM news WHERE isFavorite = 0")
+    suspend fun deleteAllNonFavoriteNews(): Int
 }

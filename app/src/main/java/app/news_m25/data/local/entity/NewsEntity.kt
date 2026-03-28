@@ -17,5 +17,13 @@ data class NewsEntity(
     val imageUrl: String?,
     val isFavorite: Boolean = false,
     val viewCount: Int = 0,
-    val createdAt: Long = System.currentTimeMillis()
-)
+    val createdAt: Long = System.currentTimeMillis(),
+    val cachedAt: Long = System.currentTimeMillis(),
+    val expiresAt: Long = System.currentTimeMillis() + CACHE_EXPIRY_DURATION
+) {
+    companion object {
+        const val CACHE_EXPIRY_DURATION = 7 * 24 * 60 * 60 * 1000L // 7 days
+    }
+
+    fun isExpired(): Boolean = System.currentTimeMillis() > expiresAt
+}

@@ -16,10 +16,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Card
@@ -59,6 +62,8 @@ fun SettingsScreen(
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
     val cacheSize by viewModel.cacheSize.collectAsState()
+    val newsCacheSize by viewModel.newsCacheSize.collectAsState()
+    val expiredNewsCount by viewModel.expiredNewsCount.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -139,6 +144,64 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
+                text = "离线缓存",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column {
+                    SettingsItem(
+                        icon = Icons.Default.Newspaper,
+                        title = "新闻缓存",
+                        subtitle = "$newsCacheSize (${expiredNewsCount}条过期)",
+                        onClick = {
+                            scope.launch {
+                                viewModel.clearExpiredNews()
+                                Logger.d("SettingsScreen", "Expired news cleared")
+                                snackbarHostState.showSnackbar("已清除过期新闻")
+                            }
+                        }
+                    )
+                    SettingsItem(
+                        icon = Icons.Default.DeleteSweep,
+                        title = "清除过期新闻",
+                        subtitle = "删除7天前的非收藏新闻",
+                        onClick = {
+                            scope.launch {
+                                viewModel.clearExpiredNews()
+                                Logger.d("SettingsScreen", "Expired news cleared")
+                                snackbarHostState.showSnackbar("已清除过期新闻")
+                            }
+                        }
+                    )
+                    SettingsItem(
+                        icon = Icons.Default.AutoAwesome,
+                        title = "清除所有新闻",
+                        subtitle = "保留收藏的新闻",
+                        onClick = {
+                            scope.launch {
+                                viewModel.clearNewsCache()
+                                Logger.d("SettingsScreen", "News cache cleared")
+                                snackbarHostState.showSnackbar("新闻缓存已清除")
+                            }
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
                 text = "存储",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
@@ -157,13 +220,13 @@ fun SettingsScreen(
                 Column {
                     SettingsItem(
                         icon = Icons.Default.Storage,
-                        title = "清除缓存",
+                        title = "应用缓存",
                         subtitle = cacheSize,
                         onClick = {
                             scope.launch {
                                 viewModel.clearCache()
-                                Logger.d("SettingsScreen", "Cache cleared")
-                                snackbarHostState.showSnackbar("缓存已清除")
+                                Logger.d("SettingsScreen", "App cache cleared")
+                                snackbarHostState.showSnackbar("应用缓存已清除")
                             }
                         }
                     )

@@ -15,4 +15,8 @@ interface NewsRepository {
     suspend fun toggleFavorite(id: Long, isFavorite: Boolean)
     suspend fun incrementViewCount(id: Long)
     suspend fun deleteNews(id: Long)
+    suspend fun getNewsCount(): Int
+    suspend fun getExpiredNewsCount(): Int
+    suspend fun deleteExpiredNews(): Int
+    suspend fun deleteAllNonFavoriteNews(): Int
 }

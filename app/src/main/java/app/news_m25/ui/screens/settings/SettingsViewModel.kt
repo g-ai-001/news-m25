@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
 import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    application: Application
+    application: Application,
+    private val newsRepository: NewsRepository
 ) : AndroidViewModel(application) {
 
     val isDarkMode: StateFlow<Boolean> = ThemeManager.isDarkModeEnabled(application)
@@ -33,9 +35,16 @@ class SettingsViewModel @Inject constructor(
     private val _cacheSize = MutableStateFlow("0 MB")
     val cacheSize: StateFlow<String> = _cacheSize.asStateFlow()
 
+    private val _newsCacheSize = MutableStateFlow("0 MB")
+    val newsCacheSize: StateFlow<String> = _newsCacheSize.asStateFlow()
+
+    private val _expiredNewsCount = MutableStateFlow(0)
+    val expiredNewsCount: StateFlow<Int> = _expiredNewsCount.asStateFlow()
+
     init {
         viewModelScope.launch {
             updateCacheSize()
+            updateNewsCacheStats()
         }
     }
 
@@ -62,10 +71,38 @@ class SettingsViewModel @Inject constructor(
                         dir.deleteRecursively()
                     }
 
-                    Logger.d("SettingsViewModel", "Cleared cache: ${formatSize(totalSize)}")
+                    Logger.d("SettingsViewModel", "Cleared app cache: ${formatSize(totalSize)}")
                     updateCacheSize()
                 } catch (e: Exception) {
                     Logger.e("SettingsViewModel", "Failed to clear cache", e)
+                }
+            }
+        }
+    }
+
+    fun clearNewsCache() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val deletedCount = newsRepository.deleteAllNonFavoriteNews()
+                    Logger.d("SettingsViewModel", "Cleared $deletedCount non-favorite news items")
+                    updateNewsCacheStats()
+                } catch (e: Exception) {
+                    Logger.e("SettingsViewModel", "Failed to clear news cache", e)
+                }
+            }
+        }
+    }
+
+    fun clearExpiredNews() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val deletedCount = newsRepository.deleteExpiredNews()
+                    Logger.d("SettingsViewModel", "Cleared $deletedCount expired news items")
+                    updateNewsCacheStats()
+                } catch (e: Exception) {
+                    Logger.e("SettingsViewModel", "Failed to clear expired news", e)
                 }
             }
         }
@@ -80,6 +117,9 @@ class SettingsViewModel @Inject constructor(
                     // Clear cache
                     clearCache()
 
+                    // Clear news cache
+                    newsRepository.deleteAllNonFavoriteNews()
+
                     // Clear shared preferences
                     val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
                     prefs.edit().clear().apply()
@@ -89,6 +129,7 @@ class SettingsViewModel @Inject constructor(
 
                     Logger.d("SettingsViewModel", "All data cleared")
                     updateCacheSize()
+                    updateNewsCacheStats()
                 } catch (e: Exception) {
                     Logger.e("SettingsViewModel", "Failed to clear all data", e)
                 }
@@ -109,6 +150,22 @@ class SettingsViewModel @Inject constructor(
                 _cacheSize.value = formatSize(totalSize)
             } catch (e: Exception) {
                 _cacheSize.value = "0 MB"
+            }
+        }
+    }
+
+    private suspend fun updateNewsCacheStats() {
+        withContext(Dispatchers.IO) {
+            try {
+                val newsCount = newsRepository.getNewsCount()
+                val expiredCount = newsRepository.getExpiredNewsCount()
+                _expiredNewsCount.value = expiredCount
+                // Estimate news cache size: ~5KB per news item average
+                val estimatedSize = newsCount * 5 * 1024L
+                _newsCacheSize.value = formatSize(estimatedSize)
+            } catch (e: Exception) {
+                _newsCacheSize.value = "0 MB"
+                _expiredNewsCount.value = 0
             }
         }
     }
