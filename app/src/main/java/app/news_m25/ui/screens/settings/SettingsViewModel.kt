@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
 import app.news_m25.util.SettingsManager
+import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
