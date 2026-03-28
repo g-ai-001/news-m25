@@ -26,4 +26,11 @@ object ThemeManager {
         }
         Logger.d("ThemeManager", "Dark mode set to: $enabled")
     }
+
+    suspend fun clearAll(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+        Logger.d("ThemeManager", "All preferences cleared")
+    }
 }

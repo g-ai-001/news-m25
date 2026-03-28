@@ -4,12 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.util.ThemeManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ThemeViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class ThemeViewModel @Inject constructor(
+    application: Application
+) : AndroidViewModel(application) {
     val isDarkMode: StateFlow<Boolean> = ThemeManager.isDarkModeEnabled(application)
         .stateIn(
             scope = viewModelScope,

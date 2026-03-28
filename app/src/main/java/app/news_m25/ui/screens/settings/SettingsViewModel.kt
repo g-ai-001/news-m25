@@ -1,7 +1,6 @@
 package app.news_m25.ui.screens.settings
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.repository.NewsRepository
@@ -115,17 +114,13 @@ class SettingsViewModel @Inject constructor(
                     val context = getApplication<Application>()
 
                     // Clear cache
-                    clearCache()
+                    clearCacheInternal(context)
 
                     // Clear news cache
                     newsRepository.deleteAllNonFavoriteNews()
 
-                    // Clear shared preferences
-                    val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-                    prefs.edit().clear().apply()
-
-                    // Reset theme to default
-                    ThemeManager.setDarkMode(context, false)
+                    // Clear all preferences via DataStore
+                    ThemeManager.clearAll(context)
 
                     Logger.d("SettingsViewModel", "All data cleared")
                     updateCacheSize()
@@ -134,6 +129,20 @@ class SettingsViewModel @Inject constructor(
                     Logger.e("SettingsViewModel", "Failed to clear all data", e)
                 }
             }
+        }
+    }
+
+    private fun clearCacheInternal(context: Application) {
+        val cacheDir = context.cacheDir
+        val externalCacheDir = context.getExternalCacheDir()
+
+        cacheDir?.let { dir ->
+            calculateDirSize(dir)
+            dir.deleteRecursively()
+        }
+        externalCacheDir?.let { dir ->
+            calculateDirSize(dir)
+            dir.deleteRecursively()
         }
     }
 
