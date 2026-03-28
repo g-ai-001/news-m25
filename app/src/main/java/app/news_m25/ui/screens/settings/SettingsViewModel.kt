@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
+import app.news_m25.util.SettingsManager
 import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,13 @@ class SettingsViewModel @Inject constructor(
             initialValue = false
         )
 
+    val textSize: StateFlow<Int> = SettingsManager.getTextSize(application)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 1
+        )
+
     private val _cacheSize = MutableStateFlow("0 MB")
     val cacheSize: StateFlow<String> = _cacheSize.asStateFlow()
 
@@ -50,6 +58,12 @@ class SettingsViewModel @Inject constructor(
     fun setDarkMode(enabled: Boolean) {
         viewModelScope.launch {
             ThemeManager.setDarkMode(getApplication(), enabled)
+        }
+    }
+
+    fun setTextSize(size: Int) {
+        viewModelScope.launch {
+            SettingsManager.setTextSize(getApplication(), size)
         }
     }
 
@@ -121,6 +135,7 @@ class SettingsViewModel @Inject constructor(
 
                     // Clear all preferences via DataStore
                     ThemeManager.clearAll(context)
+                    SettingsManager.clearAll(context)
 
                     Logger.d("SettingsViewModel", "All data cleared")
                     updateCacheSize()

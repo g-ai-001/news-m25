@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.news_m25.util.Logger
+import app.news_m25.util.TextSize
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -51,6 +52,7 @@ fun NewsDetailScreen(
     viewModel: NewsDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val textSize by viewModel.textSize.collectAsState()
     val context = LocalContext.current
 
     Scaffold(
@@ -158,11 +160,19 @@ fun NewsDetailScreen(
 
                         Spacer(modifier = Modifier.height(20.dp))
 
+                        val textSizeValue = TextSize.fromValue(textSize)
+                        val bodyTextStyle = when (textSizeValue) {
+                            TextSize.SMALL -> MaterialTheme.typography.bodyMedium
+                            TextSize.MEDIUM -> MaterialTheme.typography.bodyLarge
+                            TextSize.LARGE -> MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 1.2f)
+                            TextSize.EXTRA_LARGE -> MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 1.4f)
+                        }
+
                         Text(
                             text = news.content,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = bodyTextStyle,
                             color = MaterialTheme.colorScheme.onBackground,
-                            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
+                            lineHeight = bodyTextStyle.lineHeight * 1.5
                         )
 
                         Spacer(modifier = Modifier.height(32.dp))

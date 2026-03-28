@@ -1,6 +1,10 @@
 package app.news_m25.ui.screens.settings
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -52,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.news_m25.BuildConfig
 import app.news_m25.util.Logger
+import app.news_m25.util.TextSize
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +66,7 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val textSize by viewModel.textSize.collectAsState()
     val cacheSize by viewModel.cacheSize.collectAsState()
     val newsCacheSize by viewModel.newsCacheSize.collectAsState()
     val expiredNewsCount by viewModel.expiredNewsCount.collectAsState()
@@ -127,6 +133,10 @@ fun SettingsScreen(
                         title = "语言",
                         subtitle = "简体中文",
                         onClick = { }
+                    )
+                    TextSizeSelector(
+                        currentSize = textSize,
+                        onSizeSelected = { viewModel.setTextSize(it) }
                     )
                     SettingsItem(
                         icon = Icons.Default.Notifications,
@@ -270,6 +280,64 @@ fun SettingsScreen(
                         showArrow = false,
                         onClick = { }
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TextSizeSelector(
+    currentSize: Int,
+    onSizeSelected: (Int) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Notifications,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "文字大小",
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TextSize.entries.forEach { size ->
+                    val isSelected = size.value == currentSize
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(
+                                if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.surfaceVariant
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable { onSizeSelected(size.value) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = size.label,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }

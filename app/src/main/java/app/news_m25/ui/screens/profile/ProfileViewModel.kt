@@ -3,6 +3,7 @@ package app.news_m25.ui.screens.profile
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import app.news_m25.util.SettingsManager
 import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,6 +22,20 @@ class ProfileViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = false
+        )
+
+    val readCount: StateFlow<Int> = SettingsManager.getReadCount(application)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0
+        )
+
+    val readTimeMinutes: StateFlow<Long> = SettingsManager.getReadTimeMinutes(application)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0L
         )
 
     fun setDarkMode(enabled: Boolean) {

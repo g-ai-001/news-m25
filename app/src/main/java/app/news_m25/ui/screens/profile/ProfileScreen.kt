@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Nightlight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +59,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val readCount by viewModel.readCount.collectAsState()
+    val readTimeMinutes by viewModel.readTimeMinutes.collectAsState()
 
     Scaffold(
         topBar = {
@@ -134,16 +138,33 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Stats Row
-            Row(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                StatItem(count = "0", label = "关注")
-                StatItem(count = "0", label = "粉丝")
-                StatItem(count = "0", label = "动态")
-                StatItem(count = "0", label = "访问")
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    StatItem(
+                        icon = Icons.Default.Visibility,
+                        count = readCount.toString(),
+                        label = "阅读篇数"
+                    )
+                    StatItem(
+                        icon = Icons.Default.Timer,
+                        count = formatReadTime(readTimeMinutes),
+                        label = "阅读时长"
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -222,12 +243,20 @@ fun ProfileScreen(
 
 @Composable
 private fun StatItem(
+    icon: ImageVector,
     count: String,
     label: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = count,
             style = MaterialTheme.typography.titleLarge,
@@ -239,6 +268,13 @@ private fun StatItem(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+private fun formatReadTime(minutes: Long): String {
+    return when {
+        minutes < 60 -> "${minutes}分钟"
+        else -> "${minutes / 60}小时${if (minutes % 60 > 0) "${minutes % 60}分钟" else ""}"
     }
 }
 

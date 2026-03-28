@@ -1,10 +1,12 @@
 package app.news_m25.ui.screens.home
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
+import app.news_m25.util.SettingsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,18 +15,30 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class SortType(val value: Int, val label: String) {
+    NEWEST(0, "最新"),
+    OLDEST(1, "最早"),
+    MOST_VIEWED(2, "最热");
+
+    companion object {
+        fun fromValue(value: Int): SortType = entries.find { it.value == value } ?: NEWEST
+    }
+}
+
 data class HomeUiState(
     val news: List<News> = emptyList(),
     val categories: List<String> = emptyList(),
     val selectedCategory: String = "推荐",
+    val sortType: SortType = SortType.NEWEST,
     val isLoading: Boolean = false,
     val error: String? = null
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val application: Application,
     private val newsRepository: NewsRepository
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -32,7 +46,16 @@ class HomeViewModel @Inject constructor(
     init {
         Logger.d("HomeViewModel", "HomeViewModel initialized")
         loadCategories()
+        loadSortType()
         loadNews()
+    }
+
+    private fun loadSortType() {
+        viewModelScope.launch {
+            SettingsManager.getSortType(application).collect { type ->
+                _uiState.value = _uiState.value.copy(sortType = SortType.fromValue(type))
+            }
+        }
     }
 
     private fun loadCategories() {
@@ -71,9 +94,10 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                     .collect { news ->
-                        Logger.d("HomeViewModel", "Loaded ${news.size} news items")
+                        val sortedNews = sortNews(news, _uiState.value.sortType)
+                        Logger.d("HomeViewModel", "Loaded ${sortedNews.size} news items")
                         _uiState.value = _uiState.value.copy(
-                            news = news,
+                            news = sortedNews,
                             isLoading = false
                         )
                     }
@@ -87,11 +111,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun sortNews(news: List<News>, sortType: SortType): List<News> {
+        return when (sortType) {
+            SortType.NEWEST -> news.sortedByDescending { it.publishedAt }
+            SortType.OLDEST -> news.sortedBy { it.publishedAt }
+            SortType.MOST_VIEWED -> news.sortedByDescending { it.viewCount }
+        }
+    }
+
     fun selectCategory(category: String) {
         if (_uiState.value.selectedCategory != category) {
             Logger.d("HomeViewModel", "Category changed to: $category")
             _uiState.value = _uiState.value.copy(selectedCategory = category)
             loadNews()
+        }
+    }
+
+    fun setSortType(sortType: SortType) {
+        viewModelScope.launch {
+            SettingsManager.setSortType(application, sortType.value)
+            _uiState.value = _uiState.value.copy(sortType = sortType)
+            val sortedNews = sortNews(_uiState.value.news, sortType)
+            _uiState.value = _uiState.value.copy(news = sortedNews)
+            Logger.d("HomeViewModel", "Sort type changed to: ${sortType.label}")
         }
     }
 
