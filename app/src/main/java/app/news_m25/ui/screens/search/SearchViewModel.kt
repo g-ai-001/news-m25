@@ -62,7 +62,7 @@ class SearchViewModel @Inject constructor(
                     )
                 }
                 .collect { results ->
-                    Logger.i("SearchViewModel", "Found ${results.size} results for: $query")
+                    Logger.d("SearchViewModel", "Found ${results.size} results for: $query")
                     _uiState.value = _uiState.value.copy(
                         results = results,
                         isSearching = false,

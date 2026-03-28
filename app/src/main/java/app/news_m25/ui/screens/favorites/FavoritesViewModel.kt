@@ -28,7 +28,7 @@ class FavoritesViewModel @Inject constructor(
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
 
     init {
-        Logger.i("FavoritesViewModel", "FavoritesViewModel initialized")
+        Logger.d("FavoritesViewModel", "FavoritesViewModel initialized")
         loadFavorites()
     }
 
@@ -44,7 +44,7 @@ class FavoritesViewModel @Inject constructor(
                     )
                 }
                 .collect { favorites ->
-                    Logger.i("FavoritesViewModel", "Loaded ${favorites.size} favorites")
+                    Logger.d("FavoritesViewModel", "Loaded ${favorites.size} favorites")
                     _uiState.value = _uiState.value.copy(
                         favorites = favorites,
                         isLoading = false
@@ -57,7 +57,7 @@ class FavoritesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 newsRepository.toggleFavorite(news.id, !news.isFavorite)
-                Logger.i("FavoritesViewModel", "Toggled favorite for news ${news.id}")
+                Logger.d("FavoritesViewModel", "Toggled favorite for news ${news.id}")
             } catch (e: Exception) {
                 Logger.e("FavoritesViewModel", "Failed to toggle favorite", e)
             }

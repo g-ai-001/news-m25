@@ -29,6 +29,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -36,12 +38,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.news_m25.BuildConfig
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +57,10 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val cacheSize by viewModel.cacheSize.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -68,7 +79,8 @@ fun SettingsScreen(
                 ),
                 modifier = Modifier.statusBarsPadding()
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -145,13 +157,25 @@ fun SettingsScreen(
                     SettingsItem(
                         icon = Icons.Default.Storage,
                         title = "清除缓存",
-                        subtitle = "0 MB",
-                        onClick = { }
+                        subtitle = cacheSize,
+                        onClick = {
+                            scope.launch {
+                                viewModel.clearCache()
+                                Logger.d("SettingsScreen", "Cache cleared")
+                                snackbarHostState.showSnackbar("缓存已清除")
+                            }
+                        }
                     )
                     SettingsItem(
                         icon = Icons.Default.Delete,
                         title = "清除所有数据",
-                        onClick = { }
+                        onClick = {
+                            scope.launch {
+                                viewModel.clearAllData()
+                                Logger.d("SettingsScreen", "All data cleared")
+                                snackbarHostState.showSnackbar("所有数据已清除")
+                            }
+                        }
                     )
                 }
             }
@@ -178,7 +202,8 @@ fun SettingsScreen(
                     SettingsItem(
                         icon = Icons.Default.Info,
                         title = "版本信息",
-                        subtitle = "0.1.0",
+                        subtitle = BuildConfig.VERSION_NAME,
+                        showArrow = false,
                         onClick = { }
                     )
                 }
@@ -192,6 +217,7 @@ private fun SettingsItem(
     icon: ImageVector,
     title: String,
     subtitle: String? = null,
+    showArrow: Boolean = true,
     onClick: (() -> Unit)? = null,
     trailing: @Composable (() -> Unit)? = null
 ) {
@@ -226,7 +252,7 @@ private fun SettingsItem(
         }
         if (trailing != null) {
             trailing()
-        } else {
+        } else if (showArrow) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                 contentDescription = null,

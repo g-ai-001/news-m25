@@ -32,7 +32,7 @@ class HistoryViewModel @Inject constructor(
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
     init {
-        Logger.i("HistoryViewModel", "HistoryViewModel initialized")
+        Logger.d("HistoryViewModel", "HistoryViewModel initialized")
         loadHistory()
     }
 
@@ -49,7 +49,7 @@ class HistoryViewModel @Inject constructor(
                 }
                 .collect { entities ->
                     val history = entities.map { it.toDomain() }
-                    Logger.i("HistoryViewModel", "Loaded ${history.size} history items")
+                    Logger.d("HistoryViewModel", "Loaded ${history.size} history items")
                     _uiState.value = _uiState.value.copy(
                         history = history,
                         isLoading = false
@@ -62,7 +62,7 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 readHistoryDao.insertReadHistory(ReadHistoryEntity(newsId = newsId))
-                Logger.i("HistoryViewModel", "Added news $newsId to history")
+                Logger.d("HistoryViewModel", "Added news $newsId to history")
             } catch (e: Exception) {
                 Logger.e("HistoryViewModel", "Failed to add to history", e)
             }
@@ -73,7 +73,7 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 readHistoryDao.clearHistory()
-                Logger.i("HistoryViewModel", "Cleared history")
+                Logger.d("HistoryViewModel", "Cleared history")
                 _uiState.value = _uiState.value.copy(history = emptyList())
             } catch (e: Exception) {
                 Logger.e("HistoryViewModel", "Failed to clear history", e)
@@ -85,7 +85,7 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 newsRepository.toggleFavorite(news.id, !news.isFavorite)
-                Logger.i("HistoryViewModel", "Toggled favorite for news ${news.id}")
+                Logger.d("HistoryViewModel", "Toggled favorite for news ${news.id}")
             } catch (e: Exception) {
                 Logger.e("HistoryViewModel", "Failed to toggle favorite", e)
             }

@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        Logger.i("HomeViewModel", "HomeViewModel initialized")
+        Logger.d("HomeViewModel", "HomeViewModel initialized")
         loadCategories()
         loadNews()
     }
@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
                 }
                 .collect { categories ->
                     _uiState.value = _uiState.value.copy(categories = categories)
-                    Logger.i("HomeViewModel", "Loaded ${categories.size} categories")
+                    Logger.d("HomeViewModel", "Loaded ${categories.size} categories")
                 }
         }
     }
@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             try {
                 val category = _uiState.value.selectedCategory
-                Logger.i("HomeViewModel", "Loading news for category: $category")
+                Logger.d("HomeViewModel", "Loading news for category: $category")
 
                 val newsFlow = if (category == "推荐") {
                     newsRepository.getAllNews()
@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                     .collect { news ->
-                        Logger.i("HomeViewModel", "Loaded ${news.size} news items")
+                        Logger.d("HomeViewModel", "Loaded ${news.size} news items")
                         _uiState.value = _uiState.value.copy(
                             news = news,
                             isLoading = false
@@ -89,7 +89,7 @@ class HomeViewModel @Inject constructor(
 
     fun selectCategory(category: String) {
         if (_uiState.value.selectedCategory != category) {
-            Logger.i("HomeViewModel", "Category changed to: $category")
+            Logger.d("HomeViewModel", "Category changed to: $category")
             _uiState.value = _uiState.value.copy(selectedCategory = category)
             loadNews()
         }
@@ -100,7 +100,7 @@ class HomeViewModel @Inject constructor(
             try {
                 val newFavoriteState = !news.isFavorite
                 newsRepository.toggleFavorite(news.id, newFavoriteState)
-                Logger.i("HomeViewModel", "Toggled favorite for news ${news.id} to $newFavoriteState")
+                Logger.d("HomeViewModel", "Toggled favorite for news ${news.id} to $newFavoriteState")
             } catch (e: Exception) {
                 Logger.e("HomeViewModel", "Failed to toggle favorite", e)
             }

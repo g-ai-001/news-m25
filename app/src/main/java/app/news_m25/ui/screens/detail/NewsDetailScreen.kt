@@ -1,5 +1,7 @@
 package app.news_m25.ui.screens.detail
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +34,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.news_m25.util.Logger
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -47,6 +51,7 @@ fun NewsDetailScreen(
     viewModel: NewsDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -70,7 +75,7 @@ fun NewsDetailScreen(
                                 else MaterialTheme.colorScheme.onSurface
                             )
                         }
-                        IconButton(onClick = { /* 分享功能 */ }) {
+                        IconButton(onClick = { shareNews(context, news.title, news.summary) }) {
                             Icon(
                                 imageVector = Icons.Default.Share,
                                 contentDescription = "分享"
@@ -165,5 +170,20 @@ fun NewsDetailScreen(
                 }
             }
         }
+    }
+}
+
+private fun shareNews(context: Context, title: String, summary: String) {
+    try {
+        val shareText = "$title\n\n$summary\n\n来自：今日头条"
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, title)
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+        context.startActivity(Intent.createChooser(intent, "分享新闻"))
+        Logger.d("NewsDetailScreen", "Share intent created for: $title")
+    } catch (e: Exception) {
+        Logger.e("NewsDetailScreen", "Failed to share news", e)
     }
 }

@@ -34,7 +34,7 @@ class NewsDetailViewModel @Inject constructor(
     val uiState: StateFlow<NewsDetailUiState> = _uiState.asStateFlow()
 
     init {
-        Logger.i("NewsDetailViewModel", "Loading news with id: $newsId")
+        Logger.d("NewsDetailViewModel", "Loading news with id: $newsId")
         loadNews()
         incrementViewCount()
         addToHistory()
@@ -46,7 +46,7 @@ class NewsDetailViewModel @Inject constructor(
             try {
                 val news = newsRepository.getNewsById(newsId)
                 if (news != null) {
-                    Logger.i("NewsDetailViewModel", "Loaded news: ${news.title}")
+                    Logger.d("NewsDetailViewModel", "Loaded news: ${news.title}")
                     _uiState.value = _uiState.value.copy(
                         news = news,
                         isLoading = false
@@ -82,7 +82,7 @@ class NewsDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 readHistoryDao.insertReadHistory(ReadHistoryEntity(newsId = newsId))
-                Logger.i("NewsDetailViewModel", "Added news $newsId to history")
+                Logger.d("NewsDetailViewModel", "Added news $newsId to history")
             } catch (e: Exception) {
                 Logger.e("NewsDetailViewModel", "Failed to add to history", e)
             }
@@ -98,7 +98,7 @@ class NewsDetailViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     news = news.copy(isFavorite = newState)
                 )
-                Logger.i("NewsDetailViewModel", "Toggled favorite to $newState")
+                Logger.d("NewsDetailViewModel", "Toggled favorite to $newState")
             } catch (e: Exception) {
                 Logger.e("NewsDetailViewModel", "Failed to toggle favorite", e)
             }
