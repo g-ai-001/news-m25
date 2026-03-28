@@ -24,6 +24,6 @@ object ThemeManager {
         context.dataStore.edit { preferences ->
             preferences[DARK_MODE_KEY] = enabled
         }
-        Logger.i("ThemeManager", "Dark mode set to: $enabled")
+        Logger.d("ThemeManager", "Dark mode set to: $enabled")
     }
 }
