@@ -2,6 +2,7 @@ package app.news_m25.di
 
 import android.content.Context
 import app.news_m25.data.local.dao.NewsDao
+import app.news_m25.data.local.dao.ReadHistoryDao
 import app.news_m25.data.local.database.NewsDatabase
 import app.news_m25.data.repository.NewsRepositoryImpl
 import app.news_m25.domain.repository.NewsRepository
@@ -27,6 +28,12 @@ object DatabaseModule {
     @Singleton
     fun provideNewsDao(database: NewsDatabase): NewsDao {
         return database.newsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideReadHistoryDao(database: NewsDatabase): ReadHistoryDao {
+        return database.readHistoryDao()
     }
 }
 

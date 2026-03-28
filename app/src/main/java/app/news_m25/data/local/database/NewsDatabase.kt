@@ -6,18 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.news_m25.data.local.dao.NewsDao
+import app.news_m25.data.local.dao.ReadHistoryDao
 import app.news_m25.data.local.entity.NewsEntity
+import app.news_m25.data.local.entity.ReadHistoryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [NewsEntity::class],
+    entities = [NewsEntity::class, ReadHistoryEntity::class],
     version = 1,
     exportSchema = true
 )
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao(): NewsDao
+    abstract fun readHistoryDao(): ReadHistoryDao
 
     companion object {
         @Volatile

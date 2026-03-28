@@ -38,24 +38,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     onSettingsClick: () -> Unit,
-    onFavoritesClick: () -> Unit
+    onFavoritesClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    var darkModeEnabled by remember { mutableStateOf(false) }
+    val isDarkMode by viewModel.isDarkMode.collectAsState()
 
     Scaffold(
         topBar = {
@@ -167,7 +168,7 @@ fun ProfileScreen(
                     MenuItem(
                         icon = Icons.Default.History,
                         title = "阅读历史",
-                        onClick = { }
+                        onClick = onHistoryClick
                     )
                     MenuItem(
                         icon = Icons.AutoMirrored.Filled.Chat,
@@ -201,8 +202,8 @@ fun ProfileScreen(
                         title = "深色模式",
                         trailing = {
                             Switch(
-                                checked = darkModeEnabled,
-                                onCheckedChange = { darkModeEnabled = it }
+                                checked = isDarkMode,
+                                onCheckedChange = { viewModel.setDarkMode(it) }
                             )
                         }
                     )

@@ -30,7 +30,6 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        Logger.init(android.app.Application())
         Logger.i("HomeViewModel", "HomeViewModel initialized")
         loadCategories()
         loadNews()

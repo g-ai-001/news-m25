@@ -34,23 +34,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    var darkMode by remember { mutableStateOf(false) }
-    var notifications by remember { mutableStateOf(true) }
+    val isDarkMode by viewModel.isDarkMode.collectAsState()
 
     Scaffold(
         topBar = {
@@ -100,8 +99,8 @@ fun SettingsScreen(
                         title = "深色模式",
                         trailing = {
                             Switch(
-                                checked = darkMode,
-                                onCheckedChange = { darkMode = it }
+                                checked = isDarkMode,
+                                onCheckedChange = { viewModel.setDarkMode(it) }
                             )
                         }
                     )
@@ -116,8 +115,8 @@ fun SettingsScreen(
                         title = "消息通知",
                         trailing = {
                             Switch(
-                                checked = notifications,
-                                onCheckedChange = { notifications = it }
+                                checked = true,
+                                onCheckedChange = { }
                             )
                         }
                     )

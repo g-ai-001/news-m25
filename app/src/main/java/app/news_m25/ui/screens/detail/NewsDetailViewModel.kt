@@ -3,6 +3,8 @@ package app.news_m25.ui.screens.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.news_m25.data.local.dao.ReadHistoryDao
+import app.news_m25.data.local.entity.ReadHistoryEntity
 import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
@@ -22,6 +24,7 @@ data class NewsDetailUiState(
 @HiltViewModel
 class NewsDetailViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
+    private val readHistoryDao: ReadHistoryDao,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -34,6 +37,7 @@ class NewsDetailViewModel @Inject constructor(
         Logger.i("NewsDetailViewModel", "Loading news with id: $newsId")
         loadNews()
         incrementViewCount()
+        addToHistory()
     }
 
     private fun loadNews() {
@@ -70,6 +74,17 @@ class NewsDetailViewModel @Inject constructor(
                 newsRepository.incrementViewCount(newsId)
             } catch (e: Exception) {
                 Logger.e("NewsDetailViewModel", "Failed to increment view count", e)
+            }
+        }
+    }
+
+    private fun addToHistory() {
+        viewModelScope.launch {
+            try {
+                readHistoryDao.insertReadHistory(ReadHistoryEntity(newsId = newsId))
+                Logger.i("NewsDetailViewModel", "Added news $newsId to history")
+            } catch (e: Exception) {
+                Logger.e("NewsDetailViewModel", "Failed to add to history", e)
             }
         }
     }

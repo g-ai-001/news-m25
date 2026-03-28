@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import app.news_m25.ui.screens.detail.NewsDetailScreen
+import app.news_m25.ui.screens.favorites.FavoritesScreen
+import app.news_m25.ui.screens.history.HistoryScreen
 import app.news_m25.ui.screens.home.HomeScreen
 import app.news_m25.ui.screens.profile.ProfileScreen
 import app.news_m25.ui.screens.search.SearchScreen
@@ -50,6 +52,9 @@ fun NewsNavGraph(
                 },
                 onFavoritesClick = {
                     navController.navigate(Screen.Favorites.route)
+                },
+                onHistoryClick = {
+                    navController.navigate(Screen.History.route)
                 }
             )
         }
@@ -83,7 +88,21 @@ fun NewsNavGraph(
         }
 
         composable(Screen.Favorites.route) {
-            // Favorites uses profile screen's state, this is placeholder
+            FavoritesScreen(
+                onBackClick = { navController.popBackStack() },
+                onNewsClick = { newsId ->
+                    navController.navigate(Screen.NewsDetail.createRoute(newsId))
+                }
+            )
+        }
+
+        composable(Screen.History.route) {
+            HistoryScreen(
+                onBackClick = { navController.popBackStack() },
+                onNewsClick = { newsId ->
+                    navController.navigate(Screen.NewsDetail.createRoute(newsId))
+                }
+            )
         }
     }
 }
