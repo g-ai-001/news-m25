@@ -4,7 +4,7 @@
 - **项目名称**: news-m25
 - **包名**: app.news_m25
 - **类型**: 仿今日头条新闻阅读应用 (单机版)
-- **版本**: 0.2.0
+- **版本**: 0.2.1
 
 ## 技术栈
 - **语言**: Kotlin 2.3.20
@@ -25,13 +25,13 @@
 
 #### 功能清单
 1. **架构优化**
-   - [ ] 统一 DataStore/SharedPreferences 使用
-   - [ ] 解决 ThemeViewModel/ProfileViewModel 重复问题
+   - [x] 统一 DataStore/SharedPreferences 使用
+   - [x] 解决 ThemeViewModel/ProfileViewModel 重复问题
 
 2. **代码质量改进**
-   - [ ] 提取重复的 UI 状态组件 (LoadingState, EmptyState, ErrorState)
-   - [ ] 统一错误处理策略
-   - [ ] Logger 日志级别优化
+   - [x] 提取重复的 UI 状态组件 (LoadingState, EmptyState, ErrorState)
+   - [x] 统一错误处理策略
+   - [x] Logger 日志级别优化
 
 ### 0.2.0 版本 - 离线缓存管理
 **目标**: 实现新闻离线缓存管理功能，用户可管理本地缓存
@@ -127,7 +127,7 @@
 - 多媒体新闻支持
 
 ## 版本历史
-- 0.2.1 - 重构优化：统一存储使用、解决ViewModel重复、提取UI状态组件 (进行中)
+- 0.2.1 - 重构优化：ThemeViewModel添加@HiltViewModel、ThemeManager新增clearAll()、统一使用DataStore、新增StateComponents组件 (已完成)
 - 0.2.0 - 离线缓存管理：添加缓存过期机制、自动清理过期缓存、手动清理缓存功能 (已完成)
 - 0.1.4 - 修复编译错误：Logger拼写错误、缺失导入 (已完成)
 - 0.1.3 - 功能完善：修复版本号硬编码、实现清除缓存/数据功能、实现分享功能 (已完成)
