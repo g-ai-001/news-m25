@@ -38,11 +38,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.news_m25.util.DateUtils
 import app.news_m25.util.Logger
 import app.news_m25.util.TextSize
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -142,10 +140,7 @@ fun NewsDetailScreen(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = "${news.source} · ${news.author} · ${
-                                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
-                                    .format(Date(news.publishedAt))
-                            }",
+                            text = "${news.source} · ${news.author} · ${DateUtils.formatFullDate(news.publishedAt)}",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

@@ -30,9 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import app.news_m25.domain.model.News
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import app.news_m25.util.DateUtils
 
 @Composable
 private fun NewsMetaInfo(
@@ -56,7 +54,7 @@ private fun NewsMetaInfo(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = formatTime(timestamp),
+            text = DateUtils.formatRelativeTime(timestamp),
             style = style,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -229,18 +227,5 @@ fun NewsCardLarge(
                 }
             }
         }
-    }
-}
-
-fun formatTime(timestamp: Long): String {
-    val now = System.currentTimeMillis()
-    val diff = now - timestamp
-
-    return when {
-        diff < 60 * 1000 -> "刚刚"
-        diff < 60 * 60 * 1000 -> "${diff / (60 * 1000)}分钟前"
-        diff < 24 * 60 * 60 * 1000 -> "${diff / (60 * 60 * 1000)}小时前"
-        diff < 7 * 24 * 60 * 60 * 1000 -> "${diff / (24 * 60 * 60 * 1000)}天前"
-        else -> SimpleDateFormat("MM-dd", Locale.US).format(Date(timestamp))
     }
 }

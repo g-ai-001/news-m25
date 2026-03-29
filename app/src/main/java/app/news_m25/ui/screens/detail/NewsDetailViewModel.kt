@@ -3,7 +3,6 @@ package app.news_m25.ui.screens.detail
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.data.local.dao.ReadHistoryDao
 import app.news_m25.data.local.entity.ReadHistoryEntity

@@ -3,6 +3,7 @@ package app.news_m25.util
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -18,12 +19,26 @@ object SettingsManager {
     private val READ_COUNT_KEY = intPreferencesKey("read_count")
     private val READ_TIME_KEY = longPreferencesKey("read_time_minutes")
     private val SORT_TYPE_KEY = intPreferencesKey("sort_type")
+    private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
     private val CATEGORY_PREFIX_KEY = "category_view_"
 
     fun getTextSize(context: Context): Flow<Int> {
         return context.settingsDataStore.data.map { preferences ->
             preferences[TEXT_SIZE_KEY] ?: 1
         }
+    }
+
+    fun isDarkModeEnabled(context: Context): Flow<Boolean> {
+        return context.settingsDataStore.data.map { preferences ->
+            preferences[DARK_MODE_KEY] ?: false
+        }
+    }
+
+    suspend fun setDarkMode(context: Context, enabled: Boolean) {
+        context.settingsDataStore.edit { preferences ->
+            preferences[DARK_MODE_KEY] = enabled
+        }
+        Logger.d("SettingsManager", "Dark mode set to: $enabled")
     }
 
     suspend fun setTextSize(context: Context, size: Int) {

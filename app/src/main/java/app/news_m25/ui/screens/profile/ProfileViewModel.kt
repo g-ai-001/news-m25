@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.util.SettingsManager
-import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +16,7 @@ class ProfileViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
-    val isDarkMode: StateFlow<Boolean> = ThemeManager.isDarkModeEnabled(application)
+    val isDarkMode: StateFlow<Boolean> = SettingsManager.isDarkModeEnabled(application)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -40,7 +39,7 @@ class ProfileViewModel @Inject constructor(
 
     fun setDarkMode(enabled: Boolean) {
         viewModelScope.launch {
-            ThemeManager.setDarkMode(getApplication(), enabled)
+            SettingsManager.setDarkMode(getApplication(), enabled)
         }
     }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.Logger
 import app.news_m25.util.SettingsManager
-import app.news_m25.util.ThemeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +24,7 @@ class SettingsViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : AndroidViewModel(application) {
 
-    val isDarkMode: StateFlow<Boolean> = ThemeManager.isDarkModeEnabled(application)
+    val isDarkMode: StateFlow<Boolean> = SettingsManager.isDarkModeEnabled(application)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -57,7 +56,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setDarkMode(enabled: Boolean) {
         viewModelScope.launch {
-            ThemeManager.setDarkMode(getApplication(), enabled)
+            SettingsManager.setDarkMode(getApplication(), enabled)
         }
     }
 
