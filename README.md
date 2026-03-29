@@ -29,6 +29,8 @@
 
 ## 版本
 
+- 0.3.2 - 重构优化：统一DataStore实例、合并SettingsManager和ThemeManager的clearAll方法、提取NewsCard通用组件
 - 0.3.0 - 用户体验提升：添加文字大小调整、阅读统计、新闻排序功能
-- 0.2.0-0.2.1 - 重构优化与缓存管理
+- 0.2.1 - 重构优化：ThemeViewModel添加@HiltViewModel、ThemeManager新增clearAll()、统一使用DataStore、新增StateComponents组件
+- 0.2.0 - 离线缓存管理：添加缓存过期机制、自动清理过期缓存、手动清理缓存功能
 - 0.1.0-0.1.4 - 基础功能完善
