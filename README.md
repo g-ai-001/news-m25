@@ -39,10 +39,8 @@
 
 ## 版本
 
-- 0.8.x - 功能增强：新闻图片画廊、搜索历史、App Widget (最新)
-- 0.7.x - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils
-- 0.6.x - 新功能增强：阅读位置记忆、分类管理
-- 0.5.x - 重构优化：完善细节和文档
-- 0.4.x - 重构优化与编译错误修复
-- 0.3.x - 用户体验提升与重构优化
-- 0.1.x-0.2.x - 基础框架搭建与功能完善
+- 0.8.x - 重构优化：提取ReadLaterManager、统一EmptyState组件、创建ScreenTopBar (最新)
+- 0.7.x-0.8.x - 功能增强：新闻图片画廊、搜索历史、App Widget
+- 0.6.x-0.7.x - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils、阅读位置记忆、分类管理
+- 0.4.x-0.5.x - 重构优化与功能完善：视频播放、个性化推荐、文字大小调整、阅读统计
+- 0.1.x-0.3.x - 基础框架搭建与功能完善

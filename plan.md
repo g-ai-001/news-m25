@@ -4,7 +4,7 @@
 - **项目名称**: news-m25
 - **包名**: app.news_m25
 - **类型**: 仿今日头条新闻阅读应用 (单机版)
-- **版本**: 0.8.1
+- **版本**: 0.8.2
 
 ## 技术栈
 - **语言**: Kotlin 2.3.20
@@ -153,22 +153,22 @@
 
 #### 功能清单
 1. **提取ReadLaterManager统一稍后阅读逻辑**
-   - [ ] 创建ReadLaterManager类统一处理toggleReadLater逻辑
-   - [ ] 移除各ViewModel中重复的toggleReadLater实现
-   - [ ] 减少代码重复
+   - [x] 创建ReadLaterManager类统一处理toggleReadLater逻辑
+   - [x] 移除各ViewModel中重复的toggleReadLater实现
+   - [x] 减少代码重复
 
 2. **统一EmptyState组件使用**
-   - [ ] FavoritesScreen使用共享EmptyState组件
-   - [ ] HistoryScreen使用共享EmptyState组件
-   - [ ] 减少重复UI代码
+   - [x] FavoritesScreen使用共享EmptyState组件
+   - [x] HistoryScreen使用共享EmptyState组件
+   - [x] 减少重复UI代码
 
 3. **创建ScreenTopBar通用标题栏**
-   - [ ] 创建ScreenTopBar composable统一标题栏样式
-   - [ ] 替换各Screen中重复的TopAppBar代码
+   - [x] 创建ScreenTopBar composable统一标题栏样式
+   - [x] 替换各Screen中重复的TopAppBar代码
 
 4. **统一FavoriteManager使用**
-   - [ ] 确保所有ViewModel通过FavoriteManager管理收藏
-   - [ ] 保持代码一致性
+   - [x] 确保所有ViewModel通过FavoriteManager管理收藏
+   - [x] 保持代码一致性
 
 ### 0.8.0 版本 - 功能增强
 **目标**: 增强用户浏览体验，添加图片画廊、搜索历史和App Widget
@@ -233,7 +233,7 @@
    - [x] 使用Android TextToSpeech API
 
 ## 版本历史
-- 0.8.2 - 重构优化：提取ReadLaterManager、统一EmptyState组件、创建ScreenTopBar (进行中)
+- 0.8.2 - 重构优化：提取ReadLaterManager、统一EmptyState组件、创建ScreenTopBar (已完成)
 - 0.8.1 - 修复编译错误 (已完成)
 - 0.8.0 - 功能增强：新闻图片画廊、搜索历史、App Widget (已完成)
 - 0.7.2 - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils、修复编译错误 (已完成)
