@@ -61,7 +61,7 @@ private fun NewsWidgetContent(news: List<NewsEntity>, context: Context) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(ColorProvider(day = androidx.compose.ui.graphics.Color.White, night = androidx.compose.ui.graphics.Color(0xFF1C1C1E)))
+            .background(ColorProvider(android.graphics.Color.WHITE))
             .padding(12.dp)
             .cornerRadius(16.dp)
     ) {
@@ -74,7 +74,7 @@ private fun NewsWidgetContent(news: List<NewsEntity>, context: Context) {
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = ColorProvider(day = androidx.compose.ui.graphics.Color(0xFFFF6B6B), night = androidx.compose.ui.graphics.Color(0xFFFF6B6B))
+                    color = ColorProvider(android.graphics.Color.parseColor("#FF6B6B"))
                 )
             )
             Spacer(modifier = GlanceModifier.width(8.dp))
@@ -82,7 +82,7 @@ private fun NewsWidgetContent(news: List<NewsEntity>, context: Context) {
                 text = "最新资讯",
                 style = TextStyle(
                     fontSize = 12.sp,
-                    color = ColorProvider(day = androidx.compose.ui.graphics.Color.Gray, night = androidx.compose.ui.graphics.Color.Gray)
+                    color = ColorProvider(android.graphics.Color.GRAY)
                 )
             )
         }
@@ -94,7 +94,7 @@ private fun NewsWidgetContent(news: List<NewsEntity>, context: Context) {
                 text = "暂无新闻",
                 style = TextStyle(
                     fontSize = 14.sp,
-                    color = ColorProvider(day = androidx.compose.ui.graphics.Color.Gray, night = androidx.compose.ui.graphics.Color.Gray)
+                    color = ColorProvider(android.graphics.Color.GRAY)
                 )
             )
         } else {
@@ -118,7 +118,7 @@ private fun NewsItem(newsItem: NewsEntity, context: Context) {
     Column(
         modifier = GlanceModifier
             .fillMaxWidth()
-            .background(ColorProvider(day = androidx.compose.ui.graphics.Color(0xFFF5F5F5), night = androidx.compose.ui.graphics.Color(0xFF2C2C2E)))
+            .background(ColorProvider(android.graphics.Color.parseColor("#F5F5F5")))
             .padding(8.dp)
             .cornerRadius(8.dp)
             .clickable(actionStartActivity(intent))
@@ -128,7 +128,7 @@ private fun NewsItem(newsItem: NewsEntity, context: Context) {
             style = TextStyle(
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = ColorProvider(day = androidx.compose.ui.graphics.Color(0xFF333333), night = androidx.compose.ui.graphics.Color.White)
+                color = ColorProvider(android.graphics.Color.parseColor("#333333"))
             ),
             maxLines = 2
         )
@@ -137,7 +137,7 @@ private fun NewsItem(newsItem: NewsEntity, context: Context) {
             text = "${newsItem.source} · ${formatTimeAgo(newsItem.publishedAt)}",
             style = TextStyle(
                 fontSize = 10.sp,
-                color = ColorProvider(day = androidx.compose.ui.graphics.Color.Gray, night = androidx.compose.ui.graphics.Color.Gray)
+                color = ColorProvider(android.graphics.Color.GRAY)
             )
         )
     }

@@ -48,8 +48,7 @@ fun ImageGalleryScreen(
             NewsImage(
                 imageUrl = imageUrls[page],
                 contentDescription = "图片 ${page + 1}",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Fit
+                modifier = Modifier.fillMaxSize()
             )
         }
 
