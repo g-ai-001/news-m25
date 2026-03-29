@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,6 +18,7 @@ object SettingsManager {
     private val READ_COUNT_KEY = intPreferencesKey("read_count")
     private val READ_TIME_KEY = longPreferencesKey("read_time_minutes")
     private val SORT_TYPE_KEY = intPreferencesKey("sort_type")
+    private val CATEGORY_PREFIX_KEY = "category_view_"
 
     fun getTextSize(context: Context): Flow<Int> {
         return context.settingsDataStore.data.map { preferences ->
@@ -76,6 +78,35 @@ object SettingsManager {
             preferences.clear()
         }
         Logger.d("SettingsManager", "All settings cleared")
+    }
+
+    fun getCategoryViewCounts(context: Context): Flow<Map<String, Int>> {
+        return context.settingsDataStore.data.map { preferences ->
+            preferences.asMap()
+                .filterKeys { it.name.startsWith(CATEGORY_PREFIX_KEY) }
+                .mapKeys { it.key.name.removePrefix(CATEGORY_PREFIX_KEY) }
+                .mapValues { (it.value as? Int) ?: 0 }
+        }
+    }
+
+    suspend fun incrementCategoryViewCount(context: Context, category: String) {
+        context.settingsDataStore.edit { preferences ->
+            val key = intPreferencesKey(CATEGORY_PREFIX_KEY + category)
+            val current = preferences[key] ?: 0
+            preferences[key] = current + 1
+        }
+        Logger.d("SettingsManager", "Incremented view count for category: $category")
+    }
+
+    fun getCategoryPreferences(context: Context): Flow<Map<String, Float>> {
+        return getCategoryViewCounts(context).map { viewCounts ->
+            val total = viewCounts.values.sum().toFloat()
+            if (total > 0) {
+                viewCounts.mapValues { it.value.toFloat() / total }
+            } else {
+                emptyMap()
+            }
+        }
     }
 }
 

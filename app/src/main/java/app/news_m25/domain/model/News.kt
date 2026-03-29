@@ -10,6 +10,7 @@ data class News(
     val author: String,
     val publishedAt: Long,
     val imageUrl: String?,
+    val videoUrl: String? = null,
     val isFavorite: Boolean = false,
     val viewCount: Int = 0
 )

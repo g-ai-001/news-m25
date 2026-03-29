@@ -13,6 +13,7 @@ fun NewsEntity.toDomain(): News {
         author = author,
         publishedAt = publishedAt,
         imageUrl = imageUrl,
+        videoUrl = videoUrl,
         isFavorite = isFavorite,
         viewCount = viewCount
     )
@@ -29,6 +30,7 @@ fun News.toEntity(): NewsEntity {
         author = author,
         publishedAt = publishedAt,
         imageUrl = imageUrl,
+        videoUrl = videoUrl,
         isFavorite = isFavorite,
         viewCount = viewCount
     )

@@ -12,13 +12,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 enum class SortType(val value: Int, val label: String) {
     NEWEST(0, "最新"),
     OLDEST(1, "最早"),
-    MOST_VIEWED(2, "最热");
+    MOST_VIEWED(2, "最热"),
+    RECOMMENDED(3, "推荐");
 
     companion object {
         fun fromValue(value: Int): SortType = entries.find { it.value == value } ?: NEWEST
@@ -66,8 +68,9 @@ class HomeViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(error = e.message)
                 }
                 .collect { categories ->
-                    _uiState.value = _uiState.value.copy(categories = categories)
-                    Logger.d("HomeViewModel", "Loaded ${categories.size} categories")
+                    val categoriesWithRecommend = listOf("推荐") + categories
+                    _uiState.value = _uiState.value.copy(categories = categoriesWithRecommend)
+                    Logger.d("HomeViewModel", "Loaded ${categoriesWithRecommend.size} categories")
                 }
         }
     }
@@ -111,11 +114,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun sortNews(news: List<News>, sortType: SortType): List<News> {
+    private suspend fun sortNews(news: List<News>, sortType: SortType): List<News> {
         return when (sortType) {
             SortType.NEWEST -> news.sortedByDescending { it.publishedAt }
             SortType.OLDEST -> news.sortedBy { it.publishedAt }
             SortType.MOST_VIEWED -> news.sortedByDescending { it.viewCount }
+            SortType.RECOMMENDED -> sortByPreference(news)
+        }
+    }
+
+    private suspend fun sortByPreference(news: List<News>): List<News> {
+        val preferences = SettingsManager.getCategoryPreferences(application).first()
+        if (preferences.isEmpty()) {
+            return news.sortedByDescending { it.publishedAt }
+        }
+        return news.sortedByDescending { item ->
+            preferences[item.category] ?: 0f
         }
     }
 

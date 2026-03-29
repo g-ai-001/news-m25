@@ -107,8 +107,10 @@ class NewsDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 SettingsManager.incrementReadCount(application)
-                // Estimate reading time: 1 minute per article
                 SettingsManager.addReadTime(application, 1)
+                _uiState.value.news?.let { news ->
+                    SettingsManager.incrementCategoryViewCount(application, news.category)
+                }
                 Logger.d("NewsDetailViewModel", "Incremented read count and added read time")
             } catch (e: Exception) {
                 Logger.e("NewsDetailViewModel", "Failed to update read stats", e)

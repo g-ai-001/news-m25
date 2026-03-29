@@ -14,6 +14,7 @@ import app.news_m25.ui.screens.home.HomeScreen
 import app.news_m25.ui.screens.profile.ProfileScreen
 import app.news_m25.ui.screens.search.SearchScreen
 import app.news_m25.ui.screens.settings.SettingsScreen
+import app.news_m25.ui.screens.video.VideoPlayerScreen
 import app.news_m25.ui.screens.video.VideoScreen
 
 @Composable
@@ -68,6 +69,19 @@ fun NewsNavGraph(
             val newsId = backStackEntry.arguments?.getLong("newsId") ?: 0L
             NewsDetailScreen(
                 newsId = newsId,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.VideoPlayer.route,
+            arguments = listOf(
+                navArgument("videoId") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            val videoId = backStackEntry.arguments?.getLong("videoId") ?: 0L
+            VideoPlayerScreen(
+                videoId = videoId,
                 onBackClick = { navController.popBackStack() }
             )
         }
