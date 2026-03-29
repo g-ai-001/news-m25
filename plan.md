@@ -4,7 +4,7 @@
 - **项目名称**: news-m25
 - **包名**: app.news_m25
 - **类型**: 仿今日头条新闻阅读应用 (单机版)
-- **版本**: 0.5.0
+- **版本**: 0.5.2
 
 ## 技术栈
 - **语言**: Kotlin 2.3.20
@@ -105,45 +105,37 @@
 
 ## 短期规划 (0.5.x)
 
-### 0.5.0 版本 - 功能完善与优化
-**目标**: 修复个性化推荐bug，完善视频功能体验
-
-#### 功能清单
-1. **修复分类偏好跟踪bug**
-   - [x] 修复NewsDetailViewModel中incrementReadCount在loadNews之前调用的问题
-   - [x] 确保用户阅读新闻时正确记录分类偏好
-
-2. **视频缩略图优化**
-   - [x] 使用Coil加载视频封面图片
-   - [x] 在VideoCard中展示视频封面缩略图
-
 ### 0.5.1 版本 - 重构优化
 **目标**: 优化代码结构，减少重复代码，提高代码可维护性
 
 #### 功能清单
 1. **提取通用UI组件**
-   - [ ] 提取NewsCard和NewsCardLarge的通用布局代码
-   - [ ] 创建统一的NewsImage组件处理图片展示
+   - [x] 提取NewsCard和NewsCardLarge的通用布局代码
+   - [x] 创建统一的NewsImage组件处理图片展示
 
 2. **优化SettingsManager职责**
-   - [ ] 拆分SettingsManager中的分类统计功能到单独的PreferencesManager
-   - [ ] 减少SettingsManager的复杂度
+   - [x] 拆分SettingsManager中的分类统计功能到单独的PreferencesManager
+   - [x] 减少SettingsManager的复杂度
 
 3. **简化ViewModel中的重复逻辑**
-   - [ ] 提取HomeViewModel和NewsDetailViewModel中共同的收藏逻辑
-   - [ ] 创建统一的收藏操作函数
+   - [x] 提取HomeViewModel和NewsDetailViewModel中共同的收藏逻辑
+   - [x] 创建统一的收藏操作函数
+
+### 0.5.2 版本 - 重构优化
+**目标**: 进一步优化代码结构，完善细节
+
+#### 功能清单
+1. **更新项目版本标识**
+   - [x] 更新plan.md中的项目版本为0.5.2
+   - [x] 确保版本号与app/build.gradle.kts一致
 
 ## 版本历史
-- 0.5.1 - 重构优化：提取通用UI组件、优化SettingsManager职责、简化ViewModel重复逻辑 (已完成)
+- 0.5.2 - 重构优化：完善细节和文档 (已完成)
+- 0.5.1 - 重构优化：提取通用UI组件NewsImage、新增FavoriteManager统一收藏逻辑 (已完成)
 - 0.5.0 - 功能完善与优化：修复分类偏好跟踪bug、视频缩略图优化 (已完成)
 - 0.4.2 - 重构优化：移除未使用import、合并ThemeManager到SettingsManager、提取日期格式化工具、简化NewsCard图片加载 (已完成)
 - 0.4.1 - 修复VideoControls ExperimentalMaterial3Api编译错误 (已完成)
 - 0.4.0 - 视频播放与个性化推荐 (已完成)
-
-## 长期规划 (1.0.x)
-- 多媒体新闻支持
-
-## 版本历史
 - 0.3.2 - 重构优化：统一DataStore实例、合并SettingsManager和ThemeManager的clearAll方法、提取NewsCard通用组件 (已完成)
 - 0.3.0 - 用户体验提升：文字大小调整、阅读统计、新闻排序 (已完成)
 - 0.2.1 - 重构优化：ThemeViewModel添加@HiltViewModel、ThemeManager新增clearAll()、统一使用DataStore、新增StateComponents组件 (已完成)
@@ -153,3 +145,6 @@
 - 0.1.2 - 代码质量优化 (已完成)
 - 0.1.1 - 功能完善：收藏、历史记录、深色模式 (已完成)
 - 0.1.0 - 基础框架搭建，新闻阅读核心功能 (已完成)
+
+## 长期规划 (1.0.x)
+- 多媒体新闻支持
