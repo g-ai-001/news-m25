@@ -39,6 +39,18 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getReadLaterNews(): Flow<List<News>> {
+        return newsDao.getReadLaterNews().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    override fun getRatedNews(): Flow<List<News>> {
+        return newsDao.getRatedNews().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
     override fun getAllCategories(): Flow<List<String>> {
         return newsDao.getAllCategories()
     }
@@ -57,6 +69,14 @@ class NewsRepositoryImpl @Inject constructor(
 
     override suspend fun toggleFavorite(id: Long, isFavorite: Boolean) {
         newsDao.updateFavorite(id, isFavorite)
+    }
+
+    override suspend fun toggleReadLater(id: Long, isReadLater: Boolean) {
+        newsDao.updateReadLater(id, isReadLater)
+    }
+
+    override suspend fun updateRating(id: Long, rating: Int) {
+        newsDao.updateRating(id, rating)
     }
 
     override suspend fun incrementViewCount(id: Long) {

@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
@@ -56,6 +57,7 @@ fun ProfileScreen(
     onSettingsClick: () -> Unit,
     onFavoritesClick: () -> Unit,
     onHistoryClick: () -> Unit,
+    onReadLaterClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
@@ -185,6 +187,11 @@ fun ProfileScreen(
                         icon = Icons.Default.Favorite,
                         title = "我的收藏",
                         onClick = onFavoritesClick
+                    )
+                    MenuItem(
+                        icon = Icons.Default.Bookmark,
+                        title = "稍后阅读",
+                        onClick = onReadLaterClick
                     )
                     MenuItem(
                         icon = Icons.Default.History,

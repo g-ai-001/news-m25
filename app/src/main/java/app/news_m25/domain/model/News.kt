@@ -12,7 +12,9 @@ data class News(
     val imageUrl: String?,
     val videoUrl: String? = null,
     val isFavorite: Boolean = false,
-    val viewCount: Int = 0
+    val viewCount: Int = 0,
+    val isReadLater: Boolean = false,
+    val rating: Int = 0
 )
 
 enum class NewsCategory(val displayName: String) {

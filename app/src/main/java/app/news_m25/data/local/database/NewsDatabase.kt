@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migrate.AutoMigration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.news_m25.data.local.dao.NewsDao
 import app.news_m25.data.local.dao.ReadHistoryDao
@@ -15,8 +16,11 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [NewsEntity::class, ReadHistoryEntity::class],
-    version = 1,
-    exportSchema = true
+    version = 2,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
 )
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao(): NewsDao

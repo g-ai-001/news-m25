@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -60,22 +62,40 @@ private fun NewsMetaInfo(
 }
 
 @Composable
-private fun FavoriteButton(
+private fun ActionButtons(
     isFavorite: Boolean,
-    onClick: () -> Unit,
+    isReadLater: Boolean,
+    onFavoriteClick: () -> Unit,
+    onReadLaterClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconSize: Int = 20
 ) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier.size(if (iconSize == 20) 32.dp else 40.dp)
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Icon(
-            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-            contentDescription = "收藏",
-            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(iconSize.dp)
-        )
+        IconButton(
+            onClick = onFavoriteClick,
+            modifier = Modifier.size(if (iconSize == 20) 32.dp else 40.dp)
+        ) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "收藏",
+                tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(iconSize.dp)
+            )
+        }
+        IconButton(
+            onClick = onReadLaterClick,
+            modifier = Modifier.size(if (iconSize == 20) 32.dp else 40.dp)
+        ) {
+            Icon(
+                imageVector = if (isReadLater) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                contentDescription = "稍后阅读",
+                tint = if (isReadLater) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(iconSize.dp)
+            )
+        }
     }
 }
 
@@ -100,6 +120,7 @@ fun NewsCard(
     news: News,
     onClick: () -> Unit,
     onFavoriteClick: () -> Unit,
+    onReadLaterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -157,9 +178,11 @@ fun NewsCard(
                         timestamp = news.publishedAt
                     )
 
-                    FavoriteButton(
+                    ActionButtons(
                         isFavorite = news.isFavorite,
-                        onClick = onFavoriteClick
+                        isReadLater = news.isReadLater,
+                        onFavoriteClick = onFavoriteClick,
+                        onReadLaterClick = onReadLaterClick
                     )
                 }
             }
@@ -172,6 +195,7 @@ fun NewsCardLarge(
     news: News,
     onClick: () -> Unit,
     onFavoriteClick: () -> Unit,
+    onReadLaterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -229,9 +253,11 @@ fun NewsCardLarge(
                         style = MaterialTheme.typography.labelMedium
                     )
 
-                    FavoriteButton(
+                    ActionButtons(
                         isFavorite = news.isFavorite,
-                        onClick = onFavoriteClick,
+                        isReadLater = news.isReadLater,
+                        onFavoriteClick = onFavoriteClick,
+                        onReadLaterClick = onReadLaterClick,
                         iconSize = 24
                     )
                 }

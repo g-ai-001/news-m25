@@ -15,7 +15,9 @@ fun NewsEntity.toDomain(): News {
         imageUrl = imageUrl,
         videoUrl = videoUrl,
         isFavorite = isFavorite,
-        viewCount = viewCount
+        viewCount = viewCount,
+        isReadLater = isReadLater,
+        rating = rating
     )
 }
 
@@ -32,6 +34,8 @@ fun News.toEntity(): NewsEntity {
         imageUrl = imageUrl,
         videoUrl = videoUrl,
         isFavorite = isFavorite,
-        viewCount = viewCount
+        viewCount = viewCount,
+        isReadLater = isReadLater,
+        rating = rating
     )
 }

@@ -8,11 +8,15 @@ interface NewsRepository {
     fun getNewsByCategory(category: String): Flow<List<News>>
     fun searchNews(keyword: String): Flow<List<News>>
     fun getFavoriteNews(): Flow<List<News>>
+    fun getReadLaterNews(): Flow<List<News>>
+    fun getRatedNews(): Flow<List<News>>
     fun getAllCategories(): Flow<List<String>>
     suspend fun getNewsById(id: Long): News?
     suspend fun insertNews(news: News): Long
     suspend fun updateNews(news: News)
     suspend fun toggleFavorite(id: Long, isFavorite: Boolean)
+    suspend fun toggleReadLater(id: Long, isReadLater: Boolean)
+    suspend fun updateRating(id: Long, rating: Int)
     suspend fun incrementViewCount(id: Long)
     suspend fun deleteNews(id: Long)
     suspend fun getNewsCount(): Int

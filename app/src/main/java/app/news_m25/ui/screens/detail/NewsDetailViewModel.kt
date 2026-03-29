@@ -145,4 +145,34 @@ class NewsDetailViewModel @Inject constructor(
             news = news.copy(isFavorite = !news.isFavorite)
         )
     }
+
+    fun toggleReadLater() {
+        val news = _uiState.value.news ?: return
+        viewModelScope.launch {
+            try {
+                newsRepository.toggleReadLater(news.id, !news.isReadLater)
+                _uiState.value = _uiState.value.copy(
+                    news = news.copy(isReadLater = !news.isReadLater)
+                )
+                Logger.d("NewsDetailViewModel", "Toggled read later for news: ${news.id}")
+            } catch (e: Exception) {
+                Logger.e("NewsDetailViewModel", "Failed to toggle read later", e)
+            }
+        }
+    }
+
+    fun setRating(rating: Int) {
+        val news = _uiState.value.news ?: return
+        viewModelScope.launch {
+            try {
+                newsRepository.updateRating(news.id, rating)
+                _uiState.value = _uiState.value.copy(
+                    news = news.copy(rating = rating)
+                )
+                Logger.d("NewsDetailViewModel", "Set rating $rating for news: ${news.id}")
+            } catch (e: Exception) {
+                Logger.e("NewsDetailViewModel", "Failed to set rating", e)
+            }
+        }
+    }
 }

@@ -130,7 +130,8 @@ fun FavoritesScreen(
                             NewsCard(
                                 news = news,
                                 onClick = { onNewsClick(news.id) },
-                                onFavoriteClick = { viewModel.toggleFavorite(news) }
+                                onFavoriteClick = { viewModel.toggleFavorite(news) },
+                                onReadLaterClick = { viewModel.toggleReadLater(news) }
                             )
                         }
                     }

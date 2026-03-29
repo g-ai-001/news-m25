@@ -18,6 +18,8 @@ data class NewsEntity(
     val videoUrl: String? = null,
     val isFavorite: Boolean = false,
     val viewCount: Int = 0,
+    val isReadLater: Boolean = false,
+    val rating: Int = 0,
     val createdAt: Long = System.currentTimeMillis(),
     val cachedAt: Long = System.currentTimeMillis(),
     val expiresAt: Long = System.currentTimeMillis() + CACHE_EXPIRY_DURATION

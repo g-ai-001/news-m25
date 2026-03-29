@@ -12,6 +12,7 @@ import app.news_m25.ui.screens.favorites.FavoritesScreen
 import app.news_m25.ui.screens.history.HistoryScreen
 import app.news_m25.ui.screens.home.HomeScreen
 import app.news_m25.ui.screens.profile.ProfileScreen
+import app.news_m25.ui.screens.readlater.ReadLaterScreen
 import app.news_m25.ui.screens.search.SearchScreen
 import app.news_m25.ui.screens.settings.SettingsScreen
 import app.news_m25.ui.screens.video.VideoPlayerScreen
@@ -56,6 +57,9 @@ fun NewsNavGraph(
                 },
                 onHistoryClick = {
                     navController.navigate(Screen.History.route)
+                },
+                onReadLaterClick = {
+                    navController.navigate(Screen.ReadLater.route)
                 }
             )
         }
@@ -112,6 +116,15 @@ fun NewsNavGraph(
 
         composable(Screen.History.route) {
             HistoryScreen(
+                onBackClick = { navController.popBackStack() },
+                onNewsClick = { newsId ->
+                    navController.navigate(Screen.NewsDetail.createRoute(newsId))
+                }
+            )
+        }
+
+        composable(Screen.ReadLater.route) {
+            ReadLaterScreen(
                 onBackClick = { navController.popBackStack() },
                 onNewsClick = { newsId ->
                     navController.navigate(Screen.NewsDetail.createRoute(newsId))

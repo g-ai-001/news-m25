@@ -25,6 +25,12 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE isFavorite = 1 ORDER BY publishedAt DESC")
     fun getFavoriteNews(): Flow<List<NewsEntity>>
 
+    @Query("SELECT * FROM news WHERE isReadLater = 1 ORDER BY publishedAt DESC")
+    fun getReadLaterNews(): Flow<List<NewsEntity>>
+
+    @Query("SELECT * FROM news WHERE rating > 0 ORDER BY rating DESC, publishedAt DESC")
+    fun getRatedNews(): Flow<List<NewsEntity>>
+
     @Query("SELECT COUNT(*) FROM news")
     suspend fun getNewsCount(): Int
 
@@ -45,6 +51,12 @@ interface NewsDao {
 
     @Query("UPDATE news SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavorite(id: Long, isFavorite: Boolean)
+
+    @Query("UPDATE news SET isReadLater = :isReadLater WHERE id = :id")
+    suspend fun updateReadLater(id: Long, isReadLater: Boolean)
+
+    @Query("UPDATE news SET rating = :rating WHERE id = :id")
+    suspend fun updateRating(id: Long, rating: Int)
 
     @Query("UPDATE news SET viewCount = viewCount + 1 WHERE id = :id")
     suspend fun incrementViewCount(id: Long)

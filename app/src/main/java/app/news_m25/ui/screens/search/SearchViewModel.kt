@@ -83,4 +83,15 @@ class SearchViewModel @Inject constructor(
     fun toggleFavorite(news: News) {
         favoriteManager.toggle(viewModelScope, news.id, news.isFavorite)
     }
+
+    fun toggleReadLater(news: News) {
+        viewModelScope.launch {
+            try {
+                newsRepository.toggleReadLater(news.id, !news.isReadLater)
+                Logger.d("SearchViewModel", "Toggled read later for news: ${news.id}")
+            } catch (e: Exception) {
+                Logger.e("SearchViewModel", "Failed to toggle read later", e)
+            }
+        }
+    }
 }
