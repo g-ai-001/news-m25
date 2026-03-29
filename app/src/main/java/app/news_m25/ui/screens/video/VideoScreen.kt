@@ -43,7 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
+import io.coilkt.coil3.compose.AsyncImage
 import app.news_m25.domain.model.News
 import app.news_m25.util.Logger
 
