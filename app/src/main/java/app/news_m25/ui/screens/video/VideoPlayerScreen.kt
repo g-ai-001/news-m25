@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package app.news_m25.ui.screens.video
 
 import android.view.ViewGroup
@@ -33,11 +31,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -170,30 +165,33 @@ fun VideoPlayerScreen(
             }
         )
     } else {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("视频播放") },
-                    navigationIcon = {
-                        IconButton(onClick = onBackClick) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "返回"
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        titleContentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    modifier = Modifier.statusBarsPadding()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "返回"
+                    )
+                }
+                Text(
+                    text = "视频播放",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
                 )
             }
-        ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+                modifier = Modifier.fillMaxSize()
             ) {
                 uiState.video?.let { video ->
                     Box(
