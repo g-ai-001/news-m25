@@ -29,8 +29,9 @@
 
 ## 版本
 
+- 0.4.1 - 修复VideoControls ExperimentalMaterial3Api编译错误
+- 0.4.0 - 视频播放与个性化推荐
 - 0.3.2 - 重构优化：统一DataStore实例、合并SettingsManager和ThemeManager的clearAll方法、提取NewsCard通用组件
 - 0.3.0 - 用户体验提升：添加文字大小调整、阅读统计、新闻排序功能
 - 0.2.1 - 重构优化：ThemeViewModel添加@HiltViewModel、ThemeManager新增clearAll()、统一使用DataStore、新增StateComponents组件
-- 0.2.0 - 离线缓存管理：添加缓存过期机制、自动清理过期缓存、手动清理缓存功能
-- 0.1.0-0.1.4 - 基础功能完善
+- 0.1.x - 基础功能完善
