@@ -64,20 +64,20 @@
 
 #### 功能清单
 1. **移除未使用的import**
-   - [ ] 移除NewsDetailViewModel中未使用的ViewModel import
+   - [x] 移除NewsDetailViewModel中未使用的ViewModel import
 
 2. **合并ThemeManager到SettingsManager**
-   - [ ] 将ThemeManager的isDarkModeEnabled和setDarkMode方法合并到SettingsManager
-   - [ ] 移除ThemeManager类
-   - [ ] 更新所有ThemeManager引用
+   - [x] 将ThemeManager的isDarkModeEnabled和setDarkMode方法合并到SettingsManager
+   - [x] 移除ThemeManager类
+   - [x] 更新所有ThemeManager引用
 
 3. **提取日期格式化工具函数**
-   - [ ] 创建DateUtils工具类统一管理日期格式化
-   - [ ] 统一NewsCard.kt和NewsDetailScreen.kt中的日期格式化逻辑
+   - [x] 创建DateUtils工具类统一管理日期格式化
+   - [x] 统一NewsCard.kt和NewsDetailScreen.kt中的日期格式化逻辑
 
 4. **简化NewsCard图片加载逻辑**
-   - [ ] 优化NewsCard中的图片加载代码结构
-   - [ ] 减少条件判断嵌套
+   - [x] 优化NewsCard中的图片加载代码结构
+   - [x] 减少条件判断嵌套
 
 ### 0.4.1 版本 - 修复编译错误
 **目标**: 修复VideoControls ExperimentalMaterial3Api编译错误
@@ -104,7 +104,7 @@
    - [ ] 偏好设置持久化存储
 
 ## 版本历史
-- 0.4.2 - 重构优化：移除未使用import、合并ThemeManager到SettingsManager、提取日期格式化工具、简化NewsCard图片加载 (进行中)
+- 0.4.2 - 重构优化：移除未使用import、合并ThemeManager到SettingsManager、提取日期格式化工具、简化NewsCard图片加载 (已完成)
 - 0.4.1 - 修复VideoControls ExperimentalMaterial3Api编译错误 (已完成)
 - 0.4.0 - 视频播放与个性化推荐 (进行中)
 
