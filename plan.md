@@ -148,6 +148,28 @@
 
 ## 短期规划 (0.8.x)
 
+### 0.8.2 版本 - 重构优化
+**目标**: 优化代码结构，减少重复代码，提高代码可维护性
+
+#### 功能清单
+1. **提取ReadLaterManager统一稍后阅读逻辑**
+   - [ ] 创建ReadLaterManager类统一处理toggleReadLater逻辑
+   - [ ] 移除各ViewModel中重复的toggleReadLater实现
+   - [ ] 减少代码重复
+
+2. **统一EmptyState组件使用**
+   - [ ] FavoritesScreen使用共享EmptyState组件
+   - [ ] HistoryScreen使用共享EmptyState组件
+   - [ ] 减少重复UI代码
+
+3. **创建ScreenTopBar通用标题栏**
+   - [ ] 创建ScreenTopBar composable统一标题栏样式
+   - [ ] 替换各Screen中重复的TopAppBar代码
+
+4. **统一FavoriteManager使用**
+   - [ ] 确保所有ViewModel通过FavoriteManager管理收藏
+   - [ ] 保持代码一致性
+
 ### 0.8.0 版本 - 功能增强
 **目标**: 增强用户浏览体验，添加图片画廊、搜索历史和App Widget
 
@@ -211,6 +233,7 @@
    - [x] 使用Android TextToSpeech API
 
 ## 版本历史
+- 0.8.2 - 重构优化：提取ReadLaterManager、统一EmptyState组件、创建ScreenTopBar (进行中)
 - 0.8.1 - 修复编译错误 (已完成)
 - 0.8.0 - 功能增强：新闻图片画廊、搜索历史、App Widget (已完成)
 - 0.7.2 - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils、修复编译错误 (已完成)

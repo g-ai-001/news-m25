@@ -7,6 +7,7 @@ import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.FavoriteManager
 import app.news_m25.util.Logger
+import app.news_m25.util.ReadLaterManager
 import app.news_m25.util.SettingsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +42,8 @@ data class HomeUiState(
 class HomeViewModel @Inject constructor(
     private val application: Application,
     private val newsRepository: NewsRepository,
-    private val favoriteManager: FavoriteManager
+    private val favoriteManager: FavoriteManager,
+    private val readLaterManager: ReadLaterManager
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -162,14 +164,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun toggleReadLater(news: News) {
-        viewModelScope.launch {
-            try {
-                newsRepository.toggleReadLater(news.id, !news.isReadLater)
-                Logger.d("HomeViewModel", "Toggled read later for news: ${news.id}")
-            } catch (e: Exception) {
-                Logger.e("HomeViewModel", "Failed to toggle read later", e)
-            }
-        }
+        readLaterManager.toggle(viewModelScope, news.id, news.isReadLater)
     }
 
     fun refresh() {

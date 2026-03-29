@@ -7,6 +7,7 @@ import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.FavoriteManager
 import app.news_m25.util.Logger
+import app.news_m25.util.ReadLaterManager
 import app.news_m25.util.SearchHistoryManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,6 +32,7 @@ data class SearchUiState(
 class SearchViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
     private val favoriteManager: FavoriteManager,
+    private val readLaterManager: ReadLaterManager,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -127,13 +129,6 @@ class SearchViewModel @Inject constructor(
     }
 
     fun toggleReadLater(news: News) {
-        viewModelScope.launch {
-            try {
-                newsRepository.toggleReadLater(news.id, !news.isReadLater)
-                Logger.d("SearchViewModel", "Toggled read later for news: ${news.id}")
-            } catch (e: Exception) {
-                Logger.e("SearchViewModel", "Failed to toggle read later", e)
-            }
-        }
+        readLaterManager.toggle(viewModelScope, news.id, news.isReadLater)
     }
 }

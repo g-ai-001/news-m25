@@ -6,9 +6,9 @@ import app.news_m25.data.local.dao.ReadHistoryDao
 import app.news_m25.data.local.entity.ReadHistoryEntity
 import app.news_m25.data.local.entity.toDomain
 import app.news_m25.domain.model.News
-import app.news_m25.domain.repository.NewsRepository
 import app.news_m25.util.FavoriteManager
 import app.news_m25.util.Logger
+import app.news_m25.util.ReadLaterManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,8 +26,8 @@ data class HistoryUiState(
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val readHistoryDao: ReadHistoryDao,
-    private val newsRepository: NewsRepository,
-    private val favoriteManager: FavoriteManager
+    private val favoriteManager: FavoriteManager,
+    private val readLaterManager: ReadLaterManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())
@@ -88,13 +88,6 @@ class HistoryViewModel @Inject constructor(
     }
 
     fun toggleReadLater(news: News) {
-        viewModelScope.launch {
-            try {
-                newsRepository.toggleReadLater(news.id, !news.isReadLater)
-                Logger.d("HistoryViewModel", "Toggled read later for news: ${news.id}")
-            } catch (e: Exception) {
-                Logger.e("HistoryViewModel", "Failed to toggle read later", e)
-            }
-        }
+        readLaterManager.toggle(viewModelScope, news.id, news.isReadLater)
     }
 }
