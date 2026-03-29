@@ -48,9 +48,6 @@ class NewsDetailViewModel @Inject constructor(
     init {
         Logger.d("NewsDetailViewModel", "Loading news with id: $newsId")
         loadNews()
-        incrementViewCount()
-        addToHistory()
-        incrementReadCount()
     }
 
     private fun loadNews() {
@@ -64,6 +61,9 @@ class NewsDetailViewModel @Inject constructor(
                         news = news,
                         isLoading = false
                     )
+                    incrementViewCount()
+                    addToHistory()
+                    incrementReadCount()
                 } else {
                     Logger.w("NewsDetailViewModel", "News not found: $newsId")
                     _uiState.value = _uiState.value.copy(
