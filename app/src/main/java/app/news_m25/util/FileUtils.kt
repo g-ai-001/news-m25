@@ -3,7 +3,8 @@ package app.news_m25.util
 import java.io.File
 
 object FileUtils {
-    fun calculateDirSize(dir: File): Long {
+    fun calculateDirSize(dir: File?): Long {
+        if (dir == null) return 0L
         var size = 0L
         if (dir.isDirectory) {
             dir.listFiles()?.forEach { file ->
@@ -25,15 +26,9 @@ object FileUtils {
     }
 
     fun clearCacheDirs(cacheDir: File?, externalCacheDir: File?): Long {
-        var totalSize = 0L
-        cacheDir?.let { dir ->
-            totalSize += calculateDirSize(dir)
-            dir.deleteRecursively()
-        }
-        externalCacheDir?.let { dir ->
-            totalSize += calculateDirSize(dir)
-            dir.deleteRecursively()
-        }
-        return totalSize
+        val size = calculateDirSize(cacheDir) + calculateDirSize(externalCacheDir)
+        cacheDir?.deleteRecursively()
+        externalCacheDir?.deleteRecursively()
+        return size
     }
 }
