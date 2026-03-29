@@ -117,7 +117,24 @@
    - [x] 使用Coil加载视频封面图片
    - [x] 在VideoCard中展示视频封面缩略图
 
+### 0.5.1 版本 - 重构优化
+**目标**: 优化代码结构，减少重复代码，提高代码可维护性
+
+#### 功能清单
+1. **提取通用UI组件**
+   - [ ] 提取NewsCard和NewsCardLarge的通用布局代码
+   - [ ] 创建统一的NewsImage组件处理图片展示
+
+2. **优化SettingsManager职责**
+   - [ ] 拆分SettingsManager中的分类统计功能到单独的PreferencesManager
+   - [ ] 减少SettingsManager的复杂度
+
+3. **简化ViewModel中的重复逻辑**
+   - [ ] 提取HomeViewModel和NewsDetailViewModel中共同的收藏逻辑
+   - [ ] 创建统一的收藏操作函数
+
 ## 版本历史
+- 0.5.1 - 重构优化：提取通用UI组件、优化SettingsManager职责、简化ViewModel重复逻辑 (进行中)
 - 0.5.0 - 功能完善与优化：修复分类偏好跟踪bug、视频缩略图优化 (已完成)
 - 0.4.2 - 重构优化：移除未使用import、合并ThemeManager到SettingsManager、提取日期格式化工具、简化NewsCard图片加载 (已完成)
 - 0.4.1 - 修复VideoControls ExperimentalMaterial3Api编译错误 (已完成)

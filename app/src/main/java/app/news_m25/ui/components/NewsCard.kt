@@ -1,6 +1,5 @@
 package app.news_m25.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -82,6 +80,22 @@ private fun FavoriteButton(
 }
 
 @Composable
+private fun NewsImageSection(
+    imageUrl: String?,
+    modifier: Modifier = Modifier
+) {
+    if (imageUrl != null) {
+        Box(modifier = modifier) {
+            NewsImage(
+                imageUrl = imageUrl,
+                contentDescription = "新闻图片",
+                modifier = Modifier.size(100.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun NewsCard(
     news: News,
     onClick: () -> Unit,
@@ -103,13 +117,9 @@ fun NewsCard(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
+            NewsImageSection(imageUrl = news.imageUrl)
+
             if (news.imageUrl != null) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                )
                 Spacer(modifier = Modifier.width(12.dp))
             }
 
@@ -175,14 +185,14 @@ fun NewsCardLarge(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
-            if (news.imageUrl != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                )
-            }
+            NewsImage(
+                imageUrl = news.imageUrl,
+                contentDescription = "新闻图片",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp),
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+            )
 
             Column(
                 modifier = Modifier.padding(16.dp)

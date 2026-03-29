@@ -1,6 +1,5 @@
 package app.news_m25.ui.screens.video
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,14 +35,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil3.compose.AsyncImage
 import app.news_m25.domain.model.News
+import app.news_m25.ui.components.NewsImage
 import app.news_m25.util.Logger
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -148,19 +145,15 @@ private fun VideoCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
-                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .aspectRatio(16f / 9f),
                 contentAlignment = Alignment.Center
             ) {
-                if (video.imageUrl != null) {
-                    AsyncImage(
-                        model = video.imageUrl,
-                        contentDescription = "视频封面",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
+                NewsImage(
+                    imageUrl = video.imageUrl,
+                    contentDescription = "视频封面",
+                    modifier = Modifier.fillMaxSize(),
+                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+                )
                 Icon(
                     imageVector = Icons.Default.PlayCircle,
                     contentDescription = "播放",

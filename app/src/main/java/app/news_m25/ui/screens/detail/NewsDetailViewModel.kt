@@ -8,6 +8,7 @@ import app.news_m25.data.local.dao.ReadHistoryDao
 import app.news_m25.data.local.entity.ReadHistoryEntity
 import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
+import app.news_m25.util.FavoriteManager
 import app.news_m25.util.Logger
 import app.news_m25.util.SettingsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,7 @@ class NewsDetailViewModel @Inject constructor(
     private val application: Application,
     private val newsRepository: NewsRepository,
     private val readHistoryDao: ReadHistoryDao,
+    private val favoriteManager: FavoriteManager,
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(application) {
 
@@ -119,17 +121,11 @@ class NewsDetailViewModel @Inject constructor(
 
     fun toggleFavorite() {
         val news = _uiState.value.news ?: return
-        viewModelScope.launch {
-            try {
-                val newState = !news.isFavorite
-                newsRepository.toggleFavorite(news.id, newState)
-                _uiState.value = _uiState.value.copy(
-                    news = news.copy(isFavorite = newState)
-                )
-                Logger.d("NewsDetailViewModel", "Toggled favorite to $newState")
-            } catch (e: Exception) {
-                Logger.e("NewsDetailViewModel", "Failed to toggle favorite", e)
-            }
+        favoriteManager.toggle(viewModelScope, news.id, news.isFavorite) { e ->
+            Logger.e("NewsDetailViewModel", "Failed to toggle favorite", e)
         }
+        _uiState.value = _uiState.value.copy(
+            news = news.copy(isFavorite = !news.isFavorite)
+        )
     }
 }

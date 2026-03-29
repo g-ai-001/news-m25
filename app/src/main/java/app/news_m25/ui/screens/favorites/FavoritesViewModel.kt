@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
+import app.news_m25.util.FavoriteManager
 import app.news_m25.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,8 @@ data class FavoritesUiState(
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository,
+    private val favoriteManager: FavoriteManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavoritesUiState())
@@ -54,13 +56,6 @@ class FavoritesViewModel @Inject constructor(
     }
 
     fun toggleFavorite(news: News) {
-        viewModelScope.launch {
-            try {
-                newsRepository.toggleFavorite(news.id, !news.isFavorite)
-                Logger.d("FavoritesViewModel", "Toggled favorite for news ${news.id}")
-            } catch (e: Exception) {
-                Logger.e("FavoritesViewModel", "Failed to toggle favorite", e)
-            }
-        }
+        favoriteManager.toggle(viewModelScope, news.id, news.isFavorite)
     }
 }

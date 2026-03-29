@@ -2,7 +2,6 @@ package app.news_m25.ui.screens.detail
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,11 +32,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.news_m25.ui.components.NewsImage
 import app.news_m25.util.DateUtils
 import app.news_m25.util.Logger
 import app.news_m25.util.TextSize
@@ -120,12 +119,13 @@ fun NewsDetailScreen(
                             .padding(16.dp)
                     ) {
                         if (news.imageUrl != null) {
-                            Box(
+                            NewsImage(
+                                imageUrl = news.imageUrl,
+                                contentDescription = "新闻图片",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(200.dp)
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .height(200.dp),
+                                shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                         }

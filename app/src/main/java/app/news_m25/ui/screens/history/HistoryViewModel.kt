@@ -7,6 +7,7 @@ import app.news_m25.data.local.entity.ReadHistoryEntity
 import app.news_m25.data.local.entity.toDomain
 import app.news_m25.domain.model.News
 import app.news_m25.domain.repository.NewsRepository
+import app.news_m25.util.FavoriteManager
 import app.news_m25.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,8 @@ data class HistoryUiState(
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val readHistoryDao: ReadHistoryDao,
-    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository,
+    private val favoriteManager: FavoriteManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistoryUiState())
@@ -82,13 +84,6 @@ class HistoryViewModel @Inject constructor(
     }
 
     fun toggleFavorite(news: News) {
-        viewModelScope.launch {
-            try {
-                newsRepository.toggleFavorite(news.id, !news.isFavorite)
-                Logger.d("HistoryViewModel", "Toggled favorite for news ${news.id}")
-            } catch (e: Exception) {
-                Logger.e("HistoryViewModel", "Failed to toggle favorite", e)
-            }
-        }
+        favoriteManager.toggle(viewModelScope, news.id, news.isFavorite)
     }
 }
