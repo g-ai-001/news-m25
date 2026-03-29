@@ -134,7 +134,7 @@
    - [ ] 创建统一的收藏操作函数
 
 ## 版本历史
-- 0.5.1 - 重构优化：提取通用UI组件、优化SettingsManager职责、简化ViewModel重复逻辑 (进行中)
+- 0.5.1 - 重构优化：提取通用UI组件、优化SettingsManager职责、简化ViewModel重复逻辑 (已完成)
 - 0.5.0 - 功能完善与优化：修复分类偏好跟踪bug、视频缩略图优化 (已完成)
 - 0.4.2 - 重构优化：移除未使用import、合并ThemeManager到SettingsManager、提取日期格式化工具、简化NewsCard图片加载 (已完成)
 - 0.4.1 - 修复VideoControls ExperimentalMaterial3Api编译错误 (已完成)
