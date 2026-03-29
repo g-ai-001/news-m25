@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package app.news_m25.ui.screens.video
 
 import android.view.ViewGroup
