@@ -37,13 +37,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import io.coilkt.coil3.compose.AsyncImage
 import app.news_m25.domain.model.News
 import app.news_m25.util.Logger
 
@@ -154,14 +152,6 @@ private fun VideoCard(
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                if (video.imageUrl != null) {
-                    AsyncImage(
-                        model = video.imageUrl,
-                        contentDescription = video.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
                 Icon(
                     imageVector = Icons.Default.PlayCircle,
                     contentDescription = "播放",
