@@ -70,7 +70,11 @@ class HomeViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(error = e.message)
                 }
                 .collect { categories ->
-                    val categoriesWithRecommend = listOf("推荐") + categories
+                    val visibilityMap = SettingsManager.getCategoryVisibility(application).first()
+                    val filteredCategories = categories.filter { category ->
+                        visibilityMap[category] ?: true
+                    }
+                    val categoriesWithRecommend = listOf("推荐") + filteredCategories
                     _uiState.value = _uiState.value.copy(categories = categoriesWithRecommend)
                     Logger.d("HomeViewModel", "Loaded ${categoriesWithRecommend.size} categories")
                 }

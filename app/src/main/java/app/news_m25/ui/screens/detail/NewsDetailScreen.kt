@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -51,6 +52,19 @@ fun NewsDetailScreen(
     val uiState by viewModel.uiState.collectAsState()
     val textSize by viewModel.textSize.collectAsState()
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(uiState.readingPosition) {
+        if (uiState.readingPosition > 0f && scrollState.maxValue > 0) {
+            scrollState.scrollTo(uiState.readingPosition.toInt())
+        }
+    }
+
+    LaunchedEffect(scrollState.value) {
+        if (scrollState.maxValue > 0) {
+            viewModel.saveReadingPosition(scrollState.value.toFloat())
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -115,7 +129,7 @@ fun NewsDetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
+                            .verticalScroll(scrollState)
                             .padding(16.dp)
                     ) {
                         if (news.imageUrl != null) {

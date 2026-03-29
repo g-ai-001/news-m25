@@ -23,7 +23,8 @@ import javax.inject.Inject
 data class NewsDetailUiState(
     val news: News? = null,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val readingPosition: Float = 0f
 )
 
 @HiltViewModel
@@ -50,6 +51,22 @@ class NewsDetailViewModel @Inject constructor(
     init {
         Logger.d("NewsDetailViewModel", "Loading news with id: $newsId")
         loadNews()
+        loadReadingPosition()
+    }
+
+    private fun loadReadingPosition() {
+        viewModelScope.launch {
+            SettingsManager.getReadingPosition(application, newsId).collect { position ->
+                _uiState.value = _uiState.value.copy(readingPosition = position)
+                Logger.d("NewsDetailViewModel", "Loaded reading position: $position")
+            }
+        }
+    }
+
+    fun saveReadingPosition(position: Float) {
+        viewModelScope.launch {
+            SettingsManager.saveReadingPosition(application, newsId, position)
+        }
     }
 
     private fun loadNews() {

@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteSweep
@@ -72,6 +73,8 @@ fun SettingsScreen(
     val cacheSize by viewModel.cacheSize.collectAsState()
     val newsCacheSize by viewModel.newsCacheSize.collectAsState()
     val expiredNewsCount by viewModel.expiredNewsCount.collectAsState()
+    val categoryVisibility by viewModel.categoryVisibility.collectAsState()
+    val allCategories by viewModel.allCategories.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -150,6 +153,45 @@ fun SettingsScreen(
                             )
                         }
                     )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "分类管理",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column {
+                    if (allCategories.isEmpty()) {
+                        CategoryVisibilityItem(
+                            title = "暂无分类",
+                            isVisible = true,
+                            onVisibilityChange = { }
+                        )
+                    } else {
+                        allCategories.forEach { category ->
+                            CategoryVisibilityItem(
+                                title = category,
+                                isVisible = categoryVisibility[category] ?: true,
+                                onVisibilityChange = { visible ->
+                                    viewModel.setCategoryVisibility(category, visible)
+                                }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -343,6 +385,36 @@ private fun TextSizeSelector(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun CategoryVisibilityItem(
+    title: String,
+    isVisible: Boolean,
+    onVisibilityChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Category,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f)
+        )
+        Switch(
+            checked = isVisible,
+            onCheckedChange = onVisibilityChange
+        )
     }
 }
 

@@ -47,10 +47,42 @@ class SettingsViewModel @Inject constructor(
     private val _expiredNewsCount = MutableStateFlow(0)
     val expiredNewsCount: StateFlow<Int> = _expiredNewsCount.asStateFlow()
 
+    private val _categoryVisibility = MutableStateFlow<Map<String, Boolean>>(emptyMap())
+    val categoryVisibility: StateFlow<Map<String, Boolean>> = _categoryVisibility.asStateFlow()
+
+    private val _allCategories = MutableStateFlow<List<String>>(emptyList())
+    val allCategories: StateFlow<List<String>> = _allCategories.asStateFlow()
+
     init {
         viewModelScope.launch {
             updateCacheSize()
             updateNewsCacheStats()
+            loadCategories()
+            loadCategoryVisibility()
+        }
+    }
+
+    private fun loadCategories() {
+        viewModelScope.launch {
+            newsRepository.getAllCategories().collect { categories ->
+                _allCategories.value = categories
+                Logger.d("SettingsViewModel", "Loaded ${categories.size} categories")
+            }
+        }
+    }
+
+    private fun loadCategoryVisibility() {
+        viewModelScope.launch {
+            SettingsManager.getCategoryVisibility(getApplication()).collect { visibility ->
+                _categoryVisibility.value = visibility
+                Logger.d("SettingsViewModel", "Loaded category visibility: $visibility")
+            }
+        }
+    }
+
+    fun setCategoryVisibility(category: String, visible: Boolean) {
+        viewModelScope.launch {
+            SettingsManager.setCategoryVisibility(getApplication(), category, visible)
         }
     }
 

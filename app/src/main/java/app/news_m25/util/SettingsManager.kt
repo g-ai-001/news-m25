@@ -21,6 +21,8 @@ object SettingsManager {
     private val SORT_TYPE_KEY = intPreferencesKey("sort_type")
     private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
     private val CATEGORY_PREFIX_KEY = "category_view_"
+    private val CATEGORY_VISIBLE_PREFIX_KEY = "category_visible_"
+    private val READING_POSITION_PREFIX_KEY = "reading_position_"
 
     fun getTextSize(context: Context): Flow<Int> {
         return context.settingsDataStore.data.map { preferences ->
@@ -122,6 +124,35 @@ object SettingsManager {
                 emptyMap()
             }
         }
+    }
+
+    fun getCategoryVisibility(context: Context): Flow<Map<String, Boolean>> {
+        return context.settingsDataStore.data.map { preferences ->
+            preferences.asMap()
+                .filterKeys { it.name.startsWith(CATEGORY_VISIBLE_PREFIX_KEY) }
+                .mapKeys { it.key.name.removePrefix(CATEGORY_VISIBLE_PREFIX_KEY) }
+                .mapValues { (it.value as? Boolean) ?: true }
+        }
+    }
+
+    suspend fun setCategoryVisibility(context: Context, category: String, visible: Boolean) {
+        context.settingsDataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(CATEGORY_VISIBLE_PREFIX_KEY + category)] = visible
+        }
+        Logger.d("SettingsManager", "Category $category visibility set to: $visible")
+    }
+
+    fun getReadingPosition(context: Context, newsId: Long): Flow<Float> {
+        return context.settingsDataStore.data.map { preferences ->
+            preferences[longPreferencesKey(READING_POSITION_PREFIX_KEY + newsId)]?.toFloat() ?: 0f
+        }
+    }
+
+    suspend fun saveReadingPosition(context: Context, newsId: Long, position: Float) {
+        context.settingsDataStore.edit { preferences ->
+            preferences[longPreferencesKey(READING_POSITION_PREFIX_KEY + newsId)] = position.toLong()
+        }
+        Logger.d("SettingsManager", "Saved reading position $position for news $newsId")
     }
 }
 
