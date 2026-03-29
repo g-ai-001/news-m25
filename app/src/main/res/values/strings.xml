@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">news-m25</string>
+    <string name="widget_description">在桌面显示最新新闻</string>
 </resources>

@@ -11,6 +11,7 @@ data class News(
     val publishedAt: Long,
     val imageUrl: String?,
     val videoUrl: String? = null,
+    val imageUrls: List<String> = emptyList(),
     val isFavorite: Boolean = false,
     val viewCount: Int = 0,
     val isReadLater: Boolean = false,

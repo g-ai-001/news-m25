@@ -36,7 +36,8 @@
 
 ## 版本
 
-- 0.7.x - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils (最新)
+- 0.8.x - 功能增强：新闻图片画廊、搜索历史、App Widget (最新)
+- 0.7.x - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils
 - 0.6.x - 新功能增强：阅读位置记忆、分类管理
 - 0.5.x - 重构优化：完善细节和文档
 - 0.4.x - 重构优化与编译错误修复

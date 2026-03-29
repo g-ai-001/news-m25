@@ -15,4 +15,10 @@ sealed class Screen(val route: String) {
     data object Favorites : Screen("favorites")
     data object History : Screen("history")
     data object ReadLater : Screen("readlater")
+    data object ImageGallery : Screen("gallery?urls={urls}&index={index}") {
+        fun createRoute(imageUrls: List<String>, index: Int = 0): String {
+            val encodedUrls = imageUrls.joinToString(",")
+            return "gallery?urls=$encodedUrls&index=$index"
+        }
+    }
 }

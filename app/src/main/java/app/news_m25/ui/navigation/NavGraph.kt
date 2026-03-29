@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import app.news_m25.ui.screens.detail.NewsDetailScreen
 import app.news_m25.ui.screens.favorites.FavoritesScreen
+import app.news_m25.ui.screens.gallery.ImageGalleryScreen
 import app.news_m25.ui.screens.history.HistoryScreen
 import app.news_m25.ui.screens.home.HomeScreen
 import app.news_m25.ui.screens.profile.ProfileScreen
@@ -17,6 +18,9 @@ import app.news_m25.ui.screens.search.SearchScreen
 import app.news_m25.ui.screens.settings.SettingsScreen
 import app.news_m25.ui.screens.video.VideoPlayerScreen
 import app.news_m25.ui.screens.video.VideoScreen
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun NewsNavGraph(
@@ -73,7 +77,10 @@ fun NewsNavGraph(
             val newsId = backStackEntry.arguments?.getLong("newsId") ?: 0L
             NewsDetailScreen(
                 newsId = newsId,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onGalleryClick = { imageUrls, index ->
+                    navController.navigate(Screen.ImageGallery.createRoute(imageUrls, index))
+                }
             )
         }
 
@@ -129,6 +136,26 @@ fun NewsNavGraph(
                 onNewsClick = { newsId ->
                     navController.navigate(Screen.NewsDetail.createRoute(newsId))
                 }
+            )
+        }
+
+        composable(
+            route = Screen.ImageGallery.route,
+            arguments = listOf(
+                navArgument("urls") { type = NavType.StringType },
+                navArgument("index") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val urlsString = backStackEntry.arguments?.getString("urls") ?: ""
+            val index = backStackEntry.arguments?.getInt("index") ?: 0
+            val imageUrls = if (urlsString.isBlank()) emptyList()
+            else urlsString.split(",").map {
+                URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
+            }
+            ImageGalleryScreen(
+                imageUrls = imageUrls,
+                initialIndex = index,
+                onClose = { navController.popBackStack() }
             )
         }
     }

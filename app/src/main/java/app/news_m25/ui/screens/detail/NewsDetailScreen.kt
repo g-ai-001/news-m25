@@ -3,6 +3,7 @@ package app.news_m25.ui.screens.detail
 import android.content.Context
 import android.content.Intent
 import android.speech.tts.TextToSpeech
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
@@ -63,6 +67,7 @@ import java.util.Locale
 fun NewsDetailScreen(
     newsId: Long,
     onBackClick: () -> Unit,
+    onGalleryClick: (List<String>, Int) -> Unit = { _, _ -> },
     viewModel: NewsDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -198,9 +203,37 @@ fun NewsDetailScreen(
                                 contentDescription = "新闻图片",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(200.dp),
+                                    .height(200.dp)
+                                    .clickable {
+                                        if (news.imageUrls.isNotEmpty()) {
+                                            onGalleryClick(news.imageUrls, 0)
+                                        }
+                                    },
                                 shape = RoundedCornerShape(12.dp)
                             )
+                            if (news.imageUrls.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "图集 (${news.imageUrls.size}张)",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    IconButton(
+                                        onClick = { onGalleryClick(news.imageUrls, 0) }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Collections,
+                                            contentDescription = "查看图集",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                            }
                             Spacer(modifier = Modifier.height(16.dp))
                         }
 

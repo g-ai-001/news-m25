@@ -16,6 +16,7 @@ data class NewsEntity(
     val publishedAt: Long,
     val imageUrl: String?,
     val videoUrl: String? = null,
+    val imageUrls: String = "",
     val isFavorite: Boolean = false,
     val viewCount: Int = 0,
     val isReadLater: Boolean = false,
@@ -29,4 +30,9 @@ data class NewsEntity(
     }
 
     fun isExpired(): Boolean = System.currentTimeMillis() > expiresAt
+
+    fun getImageUrlsList(): List<String> {
+        return if (imageUrls.isBlank()) emptyList()
+        else imageUrls.split("|").filter { it.isNotBlank() }
+    }
 }
