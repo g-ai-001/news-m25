@@ -1,0 +1,39 @@
+package app.news_m25.util
+
+import java.io.File
+
+object FileUtils {
+    fun calculateDirSize(dir: File): Long {
+        var size = 0L
+        if (dir.isDirectory) {
+            dir.listFiles()?.forEach { file ->
+                size += if (file.isDirectory) calculateDirSize(file) else file.length()
+            }
+        } else {
+            size = dir.length()
+        }
+        return size
+    }
+
+    fun formatSize(size: Long): String {
+        return when {
+            size < 1024 -> "$size B"
+            size < 1024 * 1024 -> "${size / 1024} KB"
+            size < 1024 * 1024 * 1024 -> "${size / (1024 * 1024)} MB"
+            else -> "${size / (1024 * 1024 * 1024)} GB"
+        }
+    }
+
+    fun clearCacheDirs(cacheDir: File?, externalCacheDir: File?): Long {
+        var totalSize = 0L
+        cacheDir?.let { dir ->
+            totalSize += calculateDirSize(dir)
+            dir.deleteRecursively()
+        }
+        externalCacheDir?.let { dir ->
+            totalSize += calculateDirSize(dir)
+            dir.deleteRecursively()
+        }
+        return totalSize
+    }
+}

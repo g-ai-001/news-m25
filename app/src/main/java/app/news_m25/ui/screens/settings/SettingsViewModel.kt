@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.news_m25.domain.repository.NewsRepository
+import app.news_m25.util.FileUtils
 import app.news_m25.util.Logger
 import app.news_m25.util.SettingsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -102,20 +102,9 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val cacheDir = getApplication<Application>().cacheDir
-                    val externalCacheDir = getApplication<Application>().getExternalCacheDir()
-
-                    var totalSize = 0L
-                    cacheDir?.let { dir ->
-                        totalSize += calculateDirSize(dir)
-                        dir.deleteRecursively()
-                    }
-                    externalCacheDir?.let { dir ->
-                        totalSize += calculateDirSize(dir)
-                        dir.deleteRecursively()
-                    }
-
-                    Logger.d("SettingsViewModel", "Cleared app cache: ${formatSize(totalSize)}")
+                    val context = getApplication<Application>()
+                    val totalSize = FileUtils.clearCacheDirs(context.cacheDir, context.getExternalCacheDir())
+                    Logger.d("SettingsViewModel", "Cleared app cache: ${FileUtils.formatSize(totalSize)}")
                     updateCacheSize()
                 } catch (e: Exception) {
                     Logger.e("SettingsViewModel", "Failed to clear cache", e)
@@ -159,7 +148,7 @@ class SettingsViewModel @Inject constructor(
                     val context = getApplication<Application>()
 
                     // Clear cache
-                    clearCacheInternal(context)
+                    FileUtils.clearCacheDirs(context.cacheDir, context.getExternalCacheDir())
 
                     // Clear news cache
                     newsRepository.deleteAllNonFavoriteNews()
@@ -177,31 +166,13 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun clearCacheInternal(context: Application) {
-        val cacheDir = context.cacheDir
-        val externalCacheDir = context.getExternalCacheDir()
-
-        cacheDir?.let { dir ->
-            calculateDirSize(dir)
-            dir.deleteRecursively()
-        }
-        externalCacheDir?.let { dir ->
-            calculateDirSize(dir)
-            dir.deleteRecursively()
-        }
-    }
-
     private suspend fun updateCacheSize() {
         withContext(Dispatchers.IO) {
             try {
-                val cacheDir = getApplication<Application>().cacheDir
-                val externalCacheDir = getApplication<Application>().getExternalCacheDir()
-
-                var totalSize = 0L
-                cacheDir?.let { totalSize += calculateDirSize(it) }
-                externalCacheDir?.let { totalSize += calculateDirSize(it) }
-
-                _cacheSize.value = formatSize(totalSize)
+                val context = getApplication<Application>()
+                val totalSize = FileUtils.calculateDirSize(context.cacheDir) +
+                    FileUtils.calculateDirSize(context.getExternalCacheDir())
+                _cacheSize.value = FileUtils.formatSize(totalSize)
             } catch (e: Exception) {
                 _cacheSize.value = "0 MB"
             }
@@ -216,32 +187,11 @@ class SettingsViewModel @Inject constructor(
                 _expiredNewsCount.value = expiredCount
                 // Estimate news cache size: ~5KB per news item average
                 val estimatedSize = newsCount * 5 * 1024L
-                _newsCacheSize.value = formatSize(estimatedSize)
+                _newsCacheSize.value = FileUtils.formatSize(estimatedSize)
             } catch (e: Exception) {
                 _newsCacheSize.value = "0 MB"
                 _expiredNewsCount.value = 0
             }
-        }
-    }
-
-    private fun calculateDirSize(dir: File): Long {
-        var size = 0L
-        if (dir.isDirectory) {
-            dir.listFiles()?.forEach { file ->
-                size += if (file.isDirectory) calculateDirSize(file) else file.length()
-            }
-        } else {
-            size = dir.length()
-        }
-        return size
-    }
-
-    private fun formatSize(size: Long): String {
-        return when {
-            size < 1024 -> "$size B"
-            size < 1024 * 1024 -> "${size / 1024} KB"
-            size < 1024 * 1024 * 1024 -> "${size / (1024 * 1024)} MB"
-            else -> "${size / (1024 * 1024 * 1024)} GB"
         }
     }
 }

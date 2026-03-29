@@ -23,7 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -31,7 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import app.news_m25.ui.navigation.NewsNavGraph
 import app.news_m25.ui.navigation.Screen
 import app.news_m25.ui.theme.NewsM25Theme
-import app.news_m25.ui.theme.ThemeViewModel
+import app.news_m25.util.SettingsManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,8 +40,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val themeViewModel: ThemeViewModel = hiltViewModel()
-            val isDarkMode by themeViewModel.isDarkMode.collectAsState()
+            val context = LocalContext.current
+            val isDarkMode by SettingsManager.isDarkModeEnabled(context).collectAsState(initial = false)
 
             NewsM25Theme(darkTheme = isDarkMode) {
                 NewsApp()

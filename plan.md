@@ -148,6 +148,23 @@
 
 ## 短期规划 (0.7.x)
 
+### 0.7.1 版本 - 重构优化
+**目标**: 优化代码结构，减少重复代码，提高代码可维护性
+
+#### 功能清单
+1. **移除冗余的ThemeViewModel类**
+   - [x] dark mode功能已在SettingsViewModel中实现
+   - [x] ThemeViewModel可移除以减少代码重复
+
+2. **简化SettingsViewModel重复缓存清理逻辑**
+   - [x] 合并clearCache和clearCacheInternal方法
+   - [x] 减少重复代码
+
+3. **提取FileUtils工具类**
+   - [x] 统一文件大小格式化逻辑
+   - [x] 统一目录大小计算逻辑
+   - [x] 减少SettingsViewModel复杂度
+
 ### 0.7.0 版本 - 稍后阅读与语音播报
 **目标**: 增强阅读体验，添加稍后阅读功能和语音播报功能
 
@@ -169,6 +186,7 @@
    - [x] 使用Android TextToSpeech API
 
 ## 版本历史
+- 0.7.1 - 重构优化：移除ThemeViewModel、简化SettingsViewModel缓存逻辑、提取FileUtils (已完成)
 - 0.7.0 - 稍后阅读与语音播报：稍后阅读功能、新闻评分、语音播报 (已完成)
 - 0.6.0 - 新功能增强：阅读位置记忆、分类管理 (已完成)
 - 0.5.2 - 重构优化：完善细节和文档 (已完成)

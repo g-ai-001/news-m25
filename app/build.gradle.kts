@@ -13,8 +13,8 @@ android {
         applicationId = "app.news_m25"
         minSdk = 36
         targetSdk = 36
-        versionCode = 15
-        versionName = "0.7.0"
+        versionCode = 16
+        versionName = "0.7.1"
 
         vectorDrawables {
             useSupportLibrary = true
