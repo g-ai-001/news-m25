@@ -108,7 +108,7 @@ fun NewsDetailScreen(
             uiState.news?.let { news ->
                 tts?.speak(news.content, TextToSpeech.QUEUE_FLUSH, null, "news_content")
                 isSpeaking = true
-            }
+            } ?: Unit
         }
     }
 
@@ -280,7 +280,7 @@ private fun RatingBar(
             ) {
                 Icon(
                     imageVector = if (star <= rating) Icons.Default.Star else Icons.Default.StarBorder,
-                    contentDescription = "评$star星",
+                    contentDescription = "评${star}星",
                     tint = if (star <= rating) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp)
                 )
