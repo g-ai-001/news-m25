@@ -294,6 +294,7 @@ fun VideoPlayerScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VideoControls(
     isPlaying: Boolean,
