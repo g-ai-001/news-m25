@@ -52,3 +52,7 @@ gradle/catalog/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Scaffold files
+kotlin-android-app-example/
+scaffold.zip
